@@ -1,1 +1,0 @@
-"""Serviços independentes das rotas."""
