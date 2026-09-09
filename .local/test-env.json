@@ -1,0 +1,1 @@
+{"DB_HOST": "127.0.0.1", "DB_PORT": "33316", "DB_USER": "root", "DB_PASSWORD": "3zzDqyqoJvWmJs27-ki2-0GyGkHL42KT04Svq6eThUE", "DB_NAME": "dessik_test", "DB_SSL": "false", "JWT_SECRET": "kABF9iFrfI3IYUMeWyPOQfvNNQdimiOvo9YYKYmpVs23O1wntaCF-HiEd6X5mIuZ", "APP_ENV": "development", "RUN_MYSQL_TESTS": "1"}

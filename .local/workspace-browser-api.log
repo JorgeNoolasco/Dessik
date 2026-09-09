@@ -1,0 +1,82 @@
+INFO:     Started server process [4960]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     127.0.0.1:49792 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49798 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49798 - "GET /css/style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49804 - "GET /css/storefront.css?v=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49805 - "GET /js/loja.js?v=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49805 - "GET /js/carrinho.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49798 - "GET /js/api.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49798 - "GET /imagens/catalogo-dessik.png HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49806 - "GET /imagens/placeholder.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49798 - "GET /api/produtos?limite=4&offset=0&busca=&categoria=&ordem=recentes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49806 - "GET /cadastro.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49806 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49810 - "GET /js/cadastro.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49810 - "POST /api/cadastro HTTP/1.1" 201 Created
+INFO:     127.0.0.1:49810 - "GET /login.html?cadastro=ok HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49806 - "GET /js/login.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49810 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49806 - "POST /api/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49806 - "GET /loja.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49806 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49806 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49810 - "GET /api/produtos?limite=12&offset=0&busca=&categoria=&ordem=recentes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49810 - "GET /imagens/hub.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49806 - "GET /imagens/mousepad.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /imagens/controle.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "GET /imagens/suporte.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "GET /admin.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /js/admin.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /api/produtos?limite=20&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "POST /api/produtos HTTP/1.1" 201 Created
+INFO:     127.0.0.1:49823 - "GET /api/produtos?limite=20&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "GET /api/produtos?limite=12&offset=0&busca=&categoria=&ordem=recentes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "GET /api/produtos?limite=12&offset=0&busca=0582ccf8b4&categoria=&ordem=recentes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "GET /carrinho.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49822 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "GET /api/produtos/26 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "POST /api/pedidos HTTP/1.1" 201 Created
+INFO:     127.0.0.1:49822 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49822 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /api/produtos?limite=12&offset=0&busca=&categoria=&ordem=recentes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /api/produtos?limite=12&offset=0&busca=0582ccf8b4&categoria=&ordem=recentes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /index.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49822 - "GET /api/produtos?limite=4&offset=0&busca=&categoria=&ordem=recentes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49822 - "GET /api/produtos?limite=12&offset=0&busca=&categoria=&ordem=recentes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /login.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /api/produtos?limite=20&offset=0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "GET /api/produtos?limite=4&offset=0&busca=&categoria=&ordem=recentes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49822 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /api/produtos?limite=12&offset=0&busca=&categoria=&ordem=recentes HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /css/storefront.css?v=3 HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49823 - "GET /api/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49823 - "GET /api/produtos?limite=20&offset=0 HTTP/1.1" 200 OK
