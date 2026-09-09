@@ -14,7 +14,7 @@ document.querySelector('#login-form').addEventListener('submit', async event => 
     button.disabled = true;
     message();
     try {
-        const data = await apiRequest('/login', {
+        const data = await apiRequest('/api/login', {
             method: 'POST',
             body: Object.fromEntries(new FormData(form))
         });
