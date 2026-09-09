@@ -52,13 +52,16 @@ Dessik/
 │   ├── login.html
 │   ├── admin.html
 │   ├── css/style.css
+│   ├── css/storefront.css
+│   ├── data/produtos-demo.json
 │   ├── js/
 │   │   ├── api.js
 │   │   ├── cadastro.js
 │   │   ├── login.js
 │   │   ├── loja.js
 │   │   └── admin.js
-│   └── images/placeholder.svg
+│   ├── images/placeholder.svg
+│   └── images/catalogo-dessik.png
 ├── database/
 │   ├── schema.sql
 │   └── dados.sql
@@ -108,7 +111,7 @@ O script não apaga tabelas e a carga de demonstração não redefine produtos j
 
 Não há senha padrão ou usuário administrador embutido. Um usuário com pedidos não pode ser excluído por causa da FK. Produtos com pedidos retornam HTTP 409 na exclusão: zere o estoque se quiser interromper as vendas sem perder o histórico.
 
-As imagens iniciais são placeholders locais identificados como ilustrativos, sem dependência de serviço externo. Para usar fotos próprias, coloque os arquivos em `public/images/` e altere `imagem_url` para `/images/nome.webp` no administrador. Também é aceita URL HTTPS. Use imagens com autorização de uso.
+Os oito produtos fictícios usam ilustrações locais criadas com IA, organizadas em um atlas visual `public/images/catalogo-dessik.png`. O CSS recorta cada item visualmente. A correspondência usa o nome do produto; imagens próprias cadastradas no administrador continuam sendo exibidas normalmente. Para usar fotos próprias, coloque os arquivos em `public/images/` e altere `imagem_url` para `/images/nome.webp` no administrador. Também é aceita URL HTTPS. Use imagens com autorização de uso.
 
 ## ETAPA 4 — Back-End
 
@@ -159,7 +162,7 @@ O navegador mantém o JWT em `sessionStorage` durante a sessão da aba. `api.js`
 
 Esse armazenamento pode ser acessado por JavaScript: uma falha XSS pode expor o token. Aqui os textos são inseridos por `textContent`, as imagens são validadas e há CSP. Em um sistema profissional, cookies `HttpOnly`, `Secure`, `SameSite` com proteção CSRF e revogação/renovação de sessão merecem consideração. Logout local não revoga um JWT já copiado, que permanece válido até expirar. O projeto não implementa rate limiting distribuído; para publicação aberta, configure regras de limitação no provedor para login e cadastro.
 
-Na loja, escolha uma quantidade, clique em Comprar e confirme a simulação. O total devolvido pelo servidor é o definitivo. Após a compra, os cards são recarregados. Em indisponibilidade do banco, aparece um erro real; não há catálogo falso de fallback. Botões desativados evitam cliques repetidos durante uma requisição, mas a API não oferece idempotência: se houver perda da resposta, consulte `GET /api/pedidos` antes de repetir a compra.
+Na loja, escolha uma quantidade, clique em Comprar e confirme a simulação. O total devolvido pelo servidor é o definitivo. Após a compra, os cards são recarregados. Em indisponibilidade da API/banco, a página informa o erro e abre um catálogo demonstrativo identificado, com oito itens de `public/data/produtos-demo.json`. Nesse modo não são criados pedidos nem apresentados estoques como reais. É possível abri-lo diretamente em `/loja.html?demo=1`. O botão Atualizar catálogo tenta reconectar à API. O catálogo conectado continua vindo exclusivamente do MySQL. Botões desativados evitam cliques repetidos durante uma requisição, mas a API não oferece idempotência: se houver perda da resposta, consulte `GET /api/pedidos` antes de repetir a compra.
 
 Os campos de endereço são opcionais. O botão Consultar CEP chama nossa API, que consulta ViaCEP com timeout de 5 segundos. Erros permitem preenchimento manual. Conforme o [contrato do ViaCEP](https://viacep.com.br/), CEP inexistente é identificado por `erro` na resposta. Evite consultas em massa.
 

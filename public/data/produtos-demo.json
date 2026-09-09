@@ -1,0 +1,74 @@
+[
+  {
+    "id_produto": 1,
+    "nome": "Notebook Horizon 14",
+    "descricao": "Leve para estudar, criar e levar sua rotina a qualquer lugar. Tela de 14 polegadas e SSD de 512 GB.",
+    "categoria": "Computadores",
+    "preco": "3299.90",
+    "quantidade_estoque": 8,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 2,
+    "nome": "Mouse Pulse",
+    "descricao": "Precisão e conforto para trabalhar e jogar. Sensor de 6.400 DPI e seis botões.",
+    "categoria": "Periféricos",
+    "preco": "129.90",
+    "quantidade_estoque": 24,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 3,
+    "nome": "Teclado mecânico Type",
+    "descricao": "Formato compacto, conexão USB e teclas mecânicas para o seu setup.",
+    "categoria": "Periféricos",
+    "preco": "249.90",
+    "quantidade_estoque": 15,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 4,
+    "nome": "Monitor View 24",
+    "descricao": "Mais espaço para suas ideias. Painel de 24 polegadas Full HD com conexão HDMI.",
+    "categoria": "Monitores",
+    "preco": "899.90",
+    "quantidade_estoque": 6,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 5,
+    "nome": "Headset Wave",
+    "descricao": "Áudio estéreo, microfone ajustável e almofadas macias para longas sessões.",
+    "categoria": "Áudio",
+    "preco": "189.90",
+    "quantidade_estoque": 18,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 6,
+    "nome": "Webcam Focus",
+    "descricao": "Videochamadas em Full HD com microfone integrado e suporte para monitor.",
+    "categoria": "Periféricos",
+    "preco": "219.90",
+    "quantidade_estoque": 0,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 7,
+    "nome": "SSD Sprint 1 TB",
+    "descricao": "Espaço e velocidade para arquivos, jogos e projetos. Interface SATA.",
+    "categoria": "Componentes",
+    "preco": "399.90",
+    "quantidade_estoque": 20,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 8,
+    "nome": "Memória RAM Flux 16 GB",
+    "descricao": "Mais fôlego para várias tarefas. Módulo DDR4 de 3.200 MHz.",
+    "categoria": "Componentes",
+    "preco": "229.90",
+    "quantidade_estoque": 12,
+    "imagem_url": "/images/catalogo-dessik.png"
+  }
+]

@@ -1,5 +1,11 @@
 # Validação da entrega
 
+## Atualização visual
+
+O redesenho da loja foi verificado com 35 testes aprovados e quatro testes de integração pulados por não haver banco ativo nesta rodada. Os cinco módulos JavaScript passaram na análise sintática. A integração completa abaixo pertence à validação anterior do backend, que não foi alterado neste redesenho.
+
+A loja agora tem um catálogo demonstrativo explícito quando a API não está disponível, com oito produtos ilustrados e sem criação de pedidos nesse modo. Os dados normais continuam vindo do MySQL. As ilustrações e seu prompt estão documentados em `IMAGENS.md`.
+
 Executada em 08/09/2026, em Windows, com Python 3.13.14.
 
 ## Resultado

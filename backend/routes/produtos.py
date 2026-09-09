@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from mysql.connector import IntegrityError
+from typing import Literal
 
 from backend.auth import admin_user
 from backend.database import transaction
@@ -15,9 +16,18 @@ def serialize_product(product):
 
 
 @router.get("")
-def list_products(limite: int = Query(100, ge=1, le=100), offset: int = Query(0, ge=0)):
+def list_products(limite: int = Query(100, ge=1, le=100), offset: int = Query(0, ge=0),
+                  busca: str = Query('', max_length=100), categoria: str = Query('', max_length=60),
+                  ordem: Literal['recentes', 'menor-preco', 'maior-preco'] = 'recentes'):
+    # Apenas expressões constantes entram no ORDER BY. Texto do usuário é parametrizado.
+    sorting = {'recentes': 'id_produto ASC', 'menor-preco': 'preco ASC, id_produto ASC',
+               'maior-preco': 'preco DESC, id_produto ASC'}[ordem]
     with transaction() as cursor:
-        cursor.execute("SELECT * FROM produtos ORDER BY id_produto LIMIT %s OFFSET %s", (limite, offset))
+        cursor.execute("""SELECT * FROM produtos
+            WHERE (%s = '' OR LOCATE(%s, CONCAT(nome, ' ', descricao)) > 0)
+              AND (%s = '' OR categoria = %s)
+            ORDER BY """ + sorting + " LIMIT %s OFFSET %s",
+                       (busca.strip(), busca.strip(), categoria, categoria, limite, offset))
         return [serialize_product(p) for p in cursor.fetchall()]
 
 

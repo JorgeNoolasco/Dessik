@@ -39,6 +39,9 @@ def main():
         for filename in files_for_stage(number):
             path = ROOT / filename
             language = languages.get(path.suffix, "text")
+            if path.suffix in {".png", ".jpg", ".jpeg", ".webp"}:
+                output.append(f"\n### Arquivo: {filename}\n\nAsset de imagem: [{path.name}](../{filename}). Copie o arquivo binário junto com o projeto.\n")
+                continue
             output.append(f"\n### Arquivo: {filename}\n\n```{language}\n{path.read_text(encoding='utf-8').rstrip()}\n```\n")
     destination = ROOT / "docs" / "PROJETO_COMPLETO.md"
     destination.parent.mkdir(exist_ok=True)

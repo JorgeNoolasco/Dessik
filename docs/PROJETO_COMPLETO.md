@@ -49,13 +49,16 @@ Dessik/
 │   ├── login.html
 │   ├── admin.html
 │   ├── css/style.css
+│   ├── css/storefront.css
+│   ├── data/produtos-demo.json
 │   ├── js/
 │   │   ├── api.js
 │   │   ├── cadastro.js
 │   │   ├── login.js
 │   │   ├── loja.js
 │   │   └── admin.js
-│   └── images/placeholder.svg
+│   ├── images/placeholder.svg
+│   └── images/catalogo-dessik.png
 ├── database/
 │   ├── schema.sql
 │   └── dados.sql
@@ -106,7 +109,7 @@ O script não apaga tabelas e a carga de demonstração não redefine produtos j
 
 Não há senha padrão ou usuário administrador embutido. Um usuário com pedidos não pode ser excluído por causa da FK. Produtos com pedidos retornam HTTP 409 na exclusão: zere o estoque se quiser interromper as vendas sem perder o histórico.
 
-As imagens iniciais são placeholders locais identificados como ilustrativos, sem dependência de serviço externo. Para usar fotos próprias, coloque os arquivos em `public/images/` e altere `imagem_url` para `/images/nome.webp` no administrador. Também é aceita URL HTTPS. Use imagens com autorização de uso.
+Os oito produtos fictícios usam ilustrações locais criadas com IA, organizadas em um atlas visual `public/images/catalogo-dessik.png`. O CSS recorta cada item visualmente. A correspondência usa o nome do produto; imagens próprias cadastradas no administrador continuam sendo exibidas normalmente. Para usar fotos próprias, coloque os arquivos em `public/images/` e altere `imagem_url` para `/images/nome.webp` no administrador. Também é aceita URL HTTPS. Use imagens com autorização de uso.
 
 
 
@@ -184,28 +187,28 @@ CREATE TABLE IF NOT EXISTS itens_pedido (
 -- Execute uma vez, após schema.sql, em um banco vazio.
 -- As condições por ID permitem repetir a inicialização sem resetar o estoque.
 INSERT INTO produtos (id_produto,nome,descricao,categoria,preco,quantidade_estoque,imagem_url)
-SELECT 1,'Notebook Horizon 14','Leve para estudar, criar e levar sua rotina a qualquer lugar. Tela de 14 polegadas e SSD de 512 GB.','Computadores',3299.90,8,'/images/placeholder.svg'
+SELECT 1,'Notebook Horizon 14','Leve para estudar, criar e levar sua rotina a qualquer lugar. Tela de 14 polegadas e SSD de 512 GB.','Computadores',3299.90,8,'/images/catalogo-dessik.png'
 WHERE NOT EXISTS (SELECT 1 FROM produtos WHERE id_produto=1);
 INSERT INTO produtos (id_produto,nome,descricao,categoria,preco,quantidade_estoque,imagem_url)
-SELECT 2,'Mouse Pulse','Precisão e conforto para trabalhar e jogar. Sensor de 6.400 DPI e seis botões.','Periféricos',129.90,24,'/images/placeholder.svg'
+SELECT 2,'Mouse Pulse','Precisão e conforto para trabalhar e jogar. Sensor de 6.400 DPI e seis botões.','Periféricos',129.90,24,'/images/catalogo-dessik.png'
 WHERE NOT EXISTS (SELECT 1 FROM produtos WHERE id_produto=2);
 INSERT INTO produtos (id_produto,nome,descricao,categoria,preco,quantidade_estoque,imagem_url)
-SELECT 3,'Teclado mecânico Type','Formato compacto, conexão USB e teclas mecânicas para o seu setup.','Periféricos',249.90,15,'/images/placeholder.svg'
+SELECT 3,'Teclado mecânico Type','Formato compacto, conexão USB e teclas mecânicas para o seu setup.','Periféricos',249.90,15,'/images/catalogo-dessik.png'
 WHERE NOT EXISTS (SELECT 1 FROM produtos WHERE id_produto=3);
 INSERT INTO produtos (id_produto,nome,descricao,categoria,preco,quantidade_estoque,imagem_url)
-SELECT 4,'Monitor View 24','Mais espaço para suas ideias. Painel de 24 polegadas Full HD com conexão HDMI.','Monitores',899.90,6,'/images/placeholder.svg'
+SELECT 4,'Monitor View 24','Mais espaço para suas ideias. Painel de 24 polegadas Full HD com conexão HDMI.','Monitores',899.90,6,'/images/catalogo-dessik.png'
 WHERE NOT EXISTS (SELECT 1 FROM produtos WHERE id_produto=4);
 INSERT INTO produtos (id_produto,nome,descricao,categoria,preco,quantidade_estoque,imagem_url)
-SELECT 5,'Headset Wave','Áudio estéreo, microfone ajustável e almofadas macias para longas sessões.','Áudio',189.90,18,'/images/placeholder.svg'
+SELECT 5,'Headset Wave','Áudio estéreo, microfone ajustável e almofadas macias para longas sessões.','Áudio',189.90,18,'/images/catalogo-dessik.png'
 WHERE NOT EXISTS (SELECT 1 FROM produtos WHERE id_produto=5);
 INSERT INTO produtos (id_produto,nome,descricao,categoria,preco,quantidade_estoque,imagem_url)
-SELECT 6,'Webcam Focus','Videochamadas em Full HD com microfone integrado e suporte para monitor.','Periféricos',219.90,0,'/images/placeholder.svg'
+SELECT 6,'Webcam Focus','Videochamadas em Full HD com microfone integrado e suporte para monitor.','Periféricos',219.90,0,'/images/catalogo-dessik.png'
 WHERE NOT EXISTS (SELECT 1 FROM produtos WHERE id_produto=6);
 INSERT INTO produtos (id_produto,nome,descricao,categoria,preco,quantidade_estoque,imagem_url)
-SELECT 7,'SSD Sprint 1 TB','Espaço e velocidade para arquivos, jogos e projetos. Interface SATA.','Componentes',399.90,20,'/images/placeholder.svg'
+SELECT 7,'SSD Sprint 1 TB','Espaço e velocidade para arquivos, jogos e projetos. Interface SATA.','Componentes',399.90,20,'/images/catalogo-dessik.png'
 WHERE NOT EXISTS (SELECT 1 FROM produtos WHERE id_produto=7);
 INSERT INTO produtos (id_produto,nome,descricao,categoria,preco,quantidade_estoque,imagem_url)
-SELECT 8,'Memória RAM Flux 16 GB','Mais fôlego para várias tarefas. Módulo DDR4 de 3.200 MHz.','Componentes',229.90,12,'/images/placeholder.svg'
+SELECT 8,'Memória RAM Flux 16 GB','Mais fôlego para várias tarefas. Módulo DDR4 de 3.200 MHz.','Componentes',229.90,12,'/images/catalogo-dessik.png'
 WHERE NOT EXISTS (SELECT 1 FROM produtos WHERE id_produto=8);
 ```
 
@@ -802,7 +805,7 @@ O navegador mantém o JWT em `sessionStorage` durante a sessão da aba. `api.js`
 
 Esse armazenamento pode ser acessado por JavaScript: uma falha XSS pode expor o token. Aqui os textos são inseridos por `textContent`, as imagens são validadas e há CSP. Em um sistema profissional, cookies `HttpOnly`, `Secure`, `SameSite` com proteção CSRF e revogação/renovação de sessão merecem consideração. Logout local não revoga um JWT já copiado, que permanece válido até expirar. O projeto não implementa rate limiting distribuído; para publicação aberta, configure regras de limitação no provedor para login e cadastro.
 
-Na loja, escolha uma quantidade, clique em Comprar e confirme a simulação. O total devolvido pelo servidor é o definitivo. Após a compra, os cards são recarregados. Em indisponibilidade do banco, aparece um erro real; não há catálogo falso de fallback. Botões desativados evitam cliques repetidos durante uma requisição, mas a API não oferece idempotência: se houver perda da resposta, consulte `GET /api/pedidos` antes de repetir a compra.
+Na loja, escolha uma quantidade, clique em Comprar e confirme a simulação. O total devolvido pelo servidor é o definitivo. Após a compra, os cards são recarregados. Em indisponibilidade da API/banco, a página informa o erro e abre um catálogo demonstrativo identificado, com oito itens de `public/data/produtos-demo.json`. Nesse modo não são criados pedidos nem apresentados estoques como reais. É possível abri-lo diretamente em `/loja.html?demo=1`. O botão Atualizar catálogo tenta reconectar à API. O catálogo conectado continua vindo exclusivamente do MySQL. Botões desativados evitam cliques repetidos durante uma requisição, mas a API não oferece idempotência: se houver perda da resposta, consulte `GET /api/pedidos` antes de repetir a compra.
 
 Os campos de endereço são opcionais. O botão Consultar CEP chama nossa API, que consulta ViaCEP com timeout de 5 segundos. Erros permitem preenchimento manual. Conforme o [contrato do ViaCEP](https://viacep.com.br/), CEP inexistente é identificado por `erro` na resposta. Evite consultas em massa.
 
@@ -812,8 +815,8 @@ Os campos de endereço são opcionais. O botão Consultar CEP chama nossa API, q
 
 ```html
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Dessik: loja fictícia de tecnologia para um projeto acadêmico."><title>Administração | Dessik</title><link rel="icon" href="/images/placeholder.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><script type="module" src="/js/admin.js"></script></head>
-<body><a class="skip" href="#main">Pular para o conteúdo</a>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Dessik: loja fictícia de tecnologia para um projeto acadêmico."><title>Administração | Dessik</title><link rel="icon" href="/images/placeholder.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/storefront.css"><script type="module" src="/js/admin.js"></script></head>
+<body class="account-page"><a class="skip" href="#main">Pular para o conteúdo</a>
 <div class="topnote">Loja fictícia · Compras simuladas, sem cobrança</div>
 <header class="navbar"><div class="nav-inner"><a class="brand" href="/loja.html" aria-label="Dessik início">dessik<span>.</span></a>
 <nav aria-label="Navegação principal"><a href="/loja.html">Produtos</a><a href="/admin.html" data-admin hidden>Administração</a>
@@ -826,13 +829,156 @@ Os campos de endereço são opcionais. O botão Consultar CEP chama nossa API, q
 
 ```html
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Dessik: loja fictícia de tecnologia para um projeto acadêmico."><title>Criar conta | Dessik</title><link rel="icon" href="/images/placeholder.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><script type="module" src="/js/cadastro.js"></script></head>
-<body><a class="skip" href="#main">Pular para o conteúdo</a>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Dessik: loja fictícia de tecnologia para um projeto acadêmico."><title>Criar conta | Dessik</title><link rel="icon" href="/images/placeholder.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/storefront.css"><script type="module" src="/js/cadastro.js"></script></head>
+<body class="account-page"><a class="skip" href="#main">Pular para o conteúdo</a>
 <div class="topnote">Loja fictícia · Compras simuladas, sem cobrança</div>
 <header class="navbar"><div class="nav-inner"><a class="brand" href="/loja.html" aria-label="Dessik início">dessik<span>.</span></a>
 <nav aria-label="Navegação principal"><a href="/loja.html">Produtos</a><a href="/admin.html" data-admin hidden>Administração</a>
 <a href="/login.html" data-guest>Entrar</a><a class="button secondary" href="/cadastro.html" data-guest>Criar conta</a>
 <span class="nav-session" data-session hidden><span data-user></span><button class="secondary" data-logout>Sair</button></span></nav></div></header><main id="main"><div class="form-layout"><section class="form-intro"><p class="eyebrow">Vamos começar</p><h1>Suas ideias.<br>Seu próximo setup.</h1><p>Crie sua conta para experimentar a loja. Todas as compras são simulações, sem pagamento.</p><a href="/loja.html">← Conhecer os produtos</a></section><section class="form-panel"><h2>Crie sua conta</h2><div id="message" class="message" role="status" aria-live="polite" hidden></div><form id="register-form"><div class="fields"><label>Nome<input name="nome" autocomplete="name" minlength="2" maxlength="100" required></label><label>E-mail<input type="email" name="email" autocomplete="email" maxlength="254" required></label><label>Senha<input type="password" name="senha" autocomplete="new-password" minlength="8" maxlength="72" aria-describedby="password-hint" required><span class="hint" id="password-hint">Pelo menos 8 caracteres. Use uma senha exclusiva.</span></label><button class="secondary" type="button" id="generate-password">Sugerir senha segura</button><label>Confirmar senha<input type="password" name="confirmar_senha" autocomplete="new-password" minlength="8" maxlength="72" required></label></div><div class="form-section"><h3>Endereço</h3><p class="hint">Opcional. Consulte o CEP ou preencha manualmente.</p></div><div class="fields"><label>CEP<input name="cep" autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{5}-?[0-9]{3}" maxlength="9" placeholder="00000-000"></label><button type="button" class="secondary" id="lookup-cep">Consultar CEP</button><div class="message" id="cep-message" role="status" hidden></div><label>Logradouro<input name="logradouro" autocomplete="address-line1" maxlength="150"></label><label>Bairro<input name="bairro" maxlength="100"></label><div class="two-cols"><label>Cidade<input name="cidade" autocomplete="address-level2" maxlength="100"></label><label>Estado (UF)<input name="estado" autocomplete="address-level1" maxlength="2" pattern="[A-Za-z]{2}" placeholder="SP"></label></div></div><div class="actions"><button class="full" type="submit">Cadastrar</button></div></form><p class="form-foot">Já tem uma conta? <a href="/login.html">Entrar</a></p></section></div></main><dialog id="confirm-dialog" aria-labelledby="dialog-title"><h2 id="dialog-title"></h2><p></p><form method="dialog" class="actions"><button class="secondary" value="cancel" autofocus>Cancelar</button><button value="confirm">Confirmar</button></form></dialog><footer><span><strong>dessik.</strong> Tecnologia para sua rotina.</span><span>Projeto acadêmico · Produtos e especificações fictícios</span></footer></body></html>
+```
+
+
+### Arquivo: public/css/storefront.css
+
+```css
+/* Identidade Dessik. Compartilhada pela loja e pelos formulários. */
+:root {
+  --ink: #161a26;
+  --muted: #697181;
+  --green: #2855e8;
+  --lime: #dce6ff;
+  --line: #e5e8ef;
+  --bg: #fafbfe;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+html { scroll-behavior: smooth; scroll-padding-top: 30px; }
+body { -webkit-font-smoothing: antialiased; }
+button, .button, a, input { transition: background .18s, color .18s, box-shadow .18s, transform .18s; }
+button, .button { border-radius: 10px; font-size: .9375rem; font-weight: 600; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible { outline-color: #426cf1; }
+.secondary { background: #edf1fb; color: #2748a9; }
+.topnote { background: #1c253d; padding: 9px 20px; color: #e5eaff; font-size: .8125rem; letter-spacing: .4px; }
+.navbar { background: #fff; }
+.nav-inner { max-width: 1320px; padding: 22px 36px; min-height: 92px; }
+.brand { font-size: 2.6rem; letter-spacing: -2.4px; line-height: 1; }
+.brand span { color: #3763f3; }
+nav { gap: 30px; }
+nav a { color: #555d70; }
+nav a:hover { color: var(--green); }
+nav a.button { background: var(--ink); color: white; padding: 11px 22px; }
+main { max-width: 1320px; padding: 28px 36px 70px; }
+.eyebrow { letter-spacing: 2px; font-size: .75rem; color: var(--green); margin-bottom: 12px; }
+.hero { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 492px; overflow: hidden; border-radius: 22px; background: #121d39; }
+.hero-copy { padding: 48px 46px 34px; color: #fff; display: flex; flex-direction: column; align-items: flex-start; }
+.collection-label { display: flex; align-items: center; gap: 10px; color: #c6d1ed; font-size: .7rem; font-weight: 600; letter-spacing: 2px; }
+.collection-label > span { width: 7px; height: 7px; border-radius: 50%; background: #83a4ff; box-shadow: 0 0 0 4px #83a4ff1a; }
+.hero h1 { font-size: clamp(2.4rem,4.1vw,3.6rem); font-weight: 650; line-height: 1.08; letter-spacing: -2.4px; margin: 30px 0 20px; }
+.hero h1 em { font-style: normal; color: #9eb8ff; }
+.hero-copy > p { max-width: 355px; font-size: 1rem; color: #bbc6de; line-height: 1.65; margin-bottom: 25px; }
+.hero-button { background: #fff; color: #182646; padding: 14px 22px; gap: 28px; }
+.hero-button > span { font-size: 1.3rem; }
+.hero-button:hover { transform: translateY(-2px); background: #e7edff; }
+.hero-caption { border-top: 1px solid #ffffff20; display: flex; gap: 18px; width: 100%; color: #b5c2dc; font-size: .75rem; padding-top: 20px; margin-top: 35px; }
+.hero-caption > span { color: #fff; font-weight: 600; white-space: nowrap; }
+.hero-showcase { position: relative; display: flex; flex-direction: column; justify-content: space-between; background: #edf1f8; padding: 30px; overflow: hidden; }
+.showcase-kicker { position: relative; z-index: 1; font-size: .66rem; font-weight: 700; letter-spacing: 3px; color: #586680; }
+.hero-product { position: absolute; width: 100%; aspect-ratio: 1; top: 50%; left: 50%; transform: translate(-50%,-51%); }
+.showcase-bottom { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: end; margin-top: auto; }
+.showcase-bottom > div { display: flex; flex-direction: column; gap: 4px; }
+.showcase-bottom span { font-size: .65rem; color: #59687e; letter-spacing: 2px; font-weight: 700; }
+.showcase-bottom strong { font-size: 1.6rem; font-weight: 600; letter-spacing: -.7px; }
+.showcase-bottom > a { background: white; color: #263b76; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; text-decoration: none; font-size: 1.5rem; box-shadow: 0 3px 14px #24395310; }
+.store-values { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; padding: 28px 8px; border-bottom: 1px solid var(--line); margin-bottom: 38px; }
+.store-values > div { display: flex; align-items: center; gap: 15px; }
+.store-values > div > span { font-size: 1.8rem; color: #4164c1; width: 36px; text-align: center; }
+.store-values p { display: flex; flex-direction: column; margin: 0; gap: 3px; }
+.store-values strong { font-size: .875rem; font-weight: 600; }
+.store-values p span { font-size: .8rem; color: var(--muted); }
+.catalog-bar { border-top: 0; padding: 0; margin-bottom: 28px; align-items: end; gap: 20px; }
+.catalog-bar h2 { font-size: clamp(1.9rem,3vw,2.45rem); font-weight: 600; line-height: 1.2; letter-spacing: -1.3px; margin-bottom: 12px; }
+#product-count { font-size: .875rem; }
+#reload { background: transparent; border: 1px solid #d7dfef; color: #4e5c7a; white-space: nowrap; }
+.grid { gap: 22px; }
+.card { border-radius: 15px; border-color: #e9ecf2; box-shadow: 0 4px 15px #243a6704; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.card:hover { transform: translateY(-5px); border-color: #ced9f2; box-shadow: 0 15px 30px #243a6710; }
+.product-visual { position: relative; aspect-ratio: 1; background: #f0f3f8; overflow: hidden; }
+.product-visual img { width: 100%; height: 100%; object-fit: contain; background: #f0f3f8; }
+.product-art { background-image: url('/images/catalogo-dessik.png'); background-size: 400% 200%; background-repeat: no-repeat; }
+.product-visual .product-art { width: 100%; height: 100%; transition: transform .35s; }
+.card:hover .product-art { transform: scale(1.04); }
+.art-notebook { background-position: 0% 0%; }
+.art-mouse { background-position: 33.333333% 0%; }
+.art-teclado { background-position: 66.666667% 0%; }
+.art-monitor { background-position: 100% 0%; }
+.art-headset { background-position: 0% 100%; }
+.art-webcam { background-position: 33.333333% 100%; }
+.art-ssd { background-position: 66.666667% 100%; }
+.art-ram { background-position: 100% 100%; }
+.product-tag { position: absolute; top: 13px; left: 13px; color: #43516c; background: #ffffffed; padding: 5px 9px; border-radius: 5px; font-size: .65rem; font-weight: 600; letter-spacing: .3px; }
+.card-body { padding: 20px; gap: 8px; }
+.card .category { font-size: .66rem; font-weight: 700; letter-spacing: 1.7px; color: #73809a; }
+.card h3 { font-size: 1.12rem; font-weight: 650; line-height: 1.4; letter-spacing: -.3px; }
+.description { font-size: .8125rem; line-height: 1.6; color: #7a8291; margin-bottom: 9px; }
+.price { font-size: 1.55rem; font-weight: 650; letter-spacing: -.8px; }
+.stock { color: #527265; font-size: .75rem; display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.stock::before { content: ''; width: 5px; height: 5px; background: #4d9676; border-radius: 50%; flex: 0 0 auto; }
+.stock.out { color: #876c70; }.stock.out::before { background: #ae9396; }
+.buy-row { gap: 8px; }.buy-row button { font-size: .8125rem; border-radius: 8px; }.buy-row input { border-color: #e0e5ef; width: 58px; }
+.buy-row button:disabled { background: #edf0f5; color: #8991a2; opacity: 1; }
+.pagination { border-top: 1px solid var(--line); margin-top: 32px; padding-top: 22px; font-size: .8125rem; }
+.pagination button { background: white; border: 1px solid var(--line); font-size: .8125rem; }
+.demo-notice { background: #edf2ff; border: 1px solid #d7e2ff; padding: 13px 17px; border-radius: 10px; font-size: .8125rem; color: #496087; margin-bottom: 22px; display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+.demo-notice a { flex-shrink: 0; font-weight: 600; }
+.message { font-size: .875rem; }
+footer { max-width: 1248px; padding: 32px 0; margin: 0 auto; align-items: center; font-size: .8125rem; }
+footer strong { color: #1b2440; font-size: 1.6rem; letter-spacing: -1px; margin-right: 10px; }
+.account-page main { padding-top: 60px; padding-bottom: 90px; }
+.form-layout { max-width: 1080px; gap: 70px; align-items: center; }
+.form-intro h1 { font-size: clamp(2.8rem,4.3vw,4.3rem); font-weight: 600; letter-spacing: -2.7px; color: #192746; }
+.form-intro p { line-height: 1.8; }
+.form-intro a { display: inline-flex; margin-top: 18px; font-size: .9rem; }
+.form-panel { padding: 34px; border-radius: 18px; border-color: #e1e7f3; box-shadow: 0 16px 55px #233a6410; }
+.form-panel h2 { color: #1d2c4f; font-weight: 600; }
+input, textarea { border-color: #dce2ee; background: #fcfdff; }
+input:focus, textarea:focus { border-color: #416be8; box-shadow: 0 0 0 3px #416be812; }
+label { color: #414c63; font-size: .875rem; }
+.hint { color: #7b8597; font-size: .8125rem; }
+.admin-layout .form-panel { padding: 26px; }.table-wrap { border-color: #e1e7f3; border-radius: 14px; }th { background: #f0f3fa; color: #53617c; }
+dialog { border-radius: 18px; border-color: #dbe2f1; box-shadow: 0 25px 90px #0b163c33; }dialog::backdrop { background: #0d173c99; backdrop-filter: blur(4px); }
+@media (min-width: 1440px) { .hero { min-height: 540px; }.hero h1 { font-size: 3.85rem; } }
+@media (max-width: 1100px) {
+  .hero-copy { padding: 38px 30px 28px; }.hero h1 { font-size: 3rem; }
+  .hero { min-height: 480px; }.grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .store-values { gap: 15px; }.store-values strong { font-size: .8rem; }.store-values p span { font-size: .75rem; }
+  footer { margin: 0 36px; }.demo-notice { align-items: flex-start; flex-direction: column; gap: 8px; }
+}
+@media (max-width: 760px) {
+  .nav-inner { padding: 21px 22px; min-height: 82px; }.brand { font-size: 2.3rem; }nav { gap: 17px; }nav a { font-size: .8rem; }nav a.button { padding: 9px 14px; }
+  main { padding: 20px 22px 40px; }.hero { grid-template-columns: 1fr 0.85fr; min-height: 430px; border-radius: 17px; }
+  .hero-copy { padding: 30px 24px; }.hero h1 { font-size: 2.45rem; letter-spacing: -1.7px; }.hero-copy > p { font-size: .875rem; }
+  .collection-label { font-size: .58rem; letter-spacing: 1.1px; }.hero-button { font-size: .8rem; gap: 12px; padding: 12px 15px; }
+  .hero-caption { font-size: .65rem; gap: 8px; margin-top: 26px; }.hero-showcase { padding: 22px 17px; }
+  .showcase-kicker { font-size: .56rem; letter-spacing: 1.3px; }.showcase-bottom strong { font-size: 1.15rem; }.showcase-bottom span { font-size: .5rem; }
+  .showcase-bottom > a { width: 36px; height: 36px; }.store-values { grid-template-columns: 1fr; padding: 22px 4px; gap: 16px; margin-bottom: 27px; }
+  .store-values strong { font-size: .875rem; }.store-values p span { font-size: .8rem; }.grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; }
+  .card-body { padding: 16px; }.catalog-bar h2 { font-size: 1.9rem; }#reload { font-size: .75rem; padding: 9px 12px; }
+  .form-layout { gap: 30px; }.account-page main { padding-top: 30px; }.form-intro h1 { font-size: 3rem; }.form-panel { padding: 25px; }
+  footer { margin: 0 22px; align-items: flex-start; }.hero-product { width: 120%; }
+}
+@media (max-width: 520px) {
+  .nav-inner { flex-direction: row; align-items: center; gap: 15px; }nav { gap: 12px; justify-content: flex-end; }nav > a:first-child { display: none; }
+  .brand { font-size: 2.05rem; }.hero { grid-template-columns: 1fr; }.hero-copy { padding: 30px 27px; }.hero h1 { font-size: 2.9rem; }
+  .hero-showcase { min-height: 320px; }.hero-product { width: 330px; }.hero-caption { margin-top: 26px; }.hero-copy > p { max-width: 100%; }
+  .showcase-bottom strong { font-size: 1.35rem; }.showcase-bottom span { font-size: .6rem; }.showcase-kicker { font-size: .6rem; }
+  .grid { grid-template-columns: 1fr; gap: 22px; }.product-visual { aspect-ratio: 1.2; }.product-visual .product-art { width: 100%; height: auto; aspect-ratio: 1; position: absolute; top: 50%; transform: translateY(-50%); }.card:hover .product-art { transform: translateY(-50%); }
+  .card-body { padding: 22px; }.card h3 { font-size: 1.25rem; }.description { font-size: .9rem; }.price { font-size: 1.7rem; }.stock { font-size: .8125rem; }.product-tag { font-size: .7rem; }
+  .catalog-bar { align-items: flex-start; flex-direction: column; gap: 16px; }.catalog-bar h2 { font-size: 2rem; }.card .category { font-size: .72rem; }.buy-row button { font-size: .9rem; }
+  .form-intro h1 { font-size: 2.7rem; }.account-page main { padding-bottom: 50px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }*, *::before, *::after { transition: none !important; }.card:hover, .hero-button:hover { transform: none; }
+}
 ```
 
 
@@ -846,6 +992,91 @@ Os campos de endereço são opcionais. O botão Consultar CEP chama nossa API, q
 ```
 
 
+### Arquivo: public/data/produtos-demo.json
+
+```json
+[
+  {
+    "id_produto": 1,
+    "nome": "Notebook Horizon 14",
+    "descricao": "Leve para estudar, criar e levar sua rotina a qualquer lugar. Tela de 14 polegadas e SSD de 512 GB.",
+    "categoria": "Computadores",
+    "preco": "3299.90",
+    "quantidade_estoque": 8,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 2,
+    "nome": "Mouse Pulse",
+    "descricao": "Precisão e conforto para trabalhar e jogar. Sensor de 6.400 DPI e seis botões.",
+    "categoria": "Periféricos",
+    "preco": "129.90",
+    "quantidade_estoque": 24,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 3,
+    "nome": "Teclado mecânico Type",
+    "descricao": "Formato compacto, conexão USB e teclas mecânicas para o seu setup.",
+    "categoria": "Periféricos",
+    "preco": "249.90",
+    "quantidade_estoque": 15,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 4,
+    "nome": "Monitor View 24",
+    "descricao": "Mais espaço para suas ideias. Painel de 24 polegadas Full HD com conexão HDMI.",
+    "categoria": "Monitores",
+    "preco": "899.90",
+    "quantidade_estoque": 6,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 5,
+    "nome": "Headset Wave",
+    "descricao": "Áudio estéreo, microfone ajustável e almofadas macias para longas sessões.",
+    "categoria": "Áudio",
+    "preco": "189.90",
+    "quantidade_estoque": 18,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 6,
+    "nome": "Webcam Focus",
+    "descricao": "Videochamadas em Full HD com microfone integrado e suporte para monitor.",
+    "categoria": "Periféricos",
+    "preco": "219.90",
+    "quantidade_estoque": 0,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 7,
+    "nome": "SSD Sprint 1 TB",
+    "descricao": "Espaço e velocidade para arquivos, jogos e projetos. Interface SATA.",
+    "categoria": "Componentes",
+    "preco": "399.90",
+    "quantidade_estoque": 20,
+    "imagem_url": "/images/catalogo-dessik.png"
+  },
+  {
+    "id_produto": 8,
+    "nome": "Memória RAM Flux 16 GB",
+    "descricao": "Mais fôlego para várias tarefas. Módulo DDR4 de 3.200 MHz.",
+    "categoria": "Componentes",
+    "preco": "229.90",
+    "quantidade_estoque": 12,
+    "imagem_url": "/images/catalogo-dessik.png"
+  }
+]
+```
+
+
+### Arquivo: public/images/catalogo-dessik.png
+
+Asset de imagem: [catalogo-dessik.png](../public/images/catalogo-dessik.png). Copie o arquivo binário junto com o projeto.
+
+
 ### Arquivo: public/images/placeholder.svg
 
 ```xml
@@ -857,14 +1088,26 @@ Os campos de endereço são opcionais. O botão Consultar CEP chama nossa API, q
 
 ```html
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Dessik: loja fictícia de tecnologia para um projeto acadêmico."><title>Loja | Dessik</title><link rel="icon" href="/images/placeholder.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><script type="module" src="/js/loja.js"></script></head>
-<body><a class="skip" href="#main">Pular para o conteúdo</a>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Dessik: loja fictícia de tecnologia para um projeto acadêmico."><title>Loja | Dessik</title><link rel="icon" href="/images/placeholder.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/storefront.css"><script type="module" src="/js/loja.js"></script></head>
+<body class="store-page"><a class="skip" href="#main">Pular para o conteúdo</a>
 <div class="topnote">Loja fictícia · Compras simuladas, sem cobrança</div>
 <header class="navbar"><div class="nav-inner"><a class="brand" href="/loja.html" aria-label="Dessik início">dessik<span>.</span></a>
-<nav aria-label="Navegação principal"><a href="/loja.html">Produtos</a><a href="/admin.html" data-admin hidden>Administração</a>
+<nav aria-label="Navegação principal"><a href="/loja.html" aria-current="page">Explorar produtos</a><a href="/admin.html" data-admin hidden>Administração</a>
 <a href="/login.html" data-guest>Entrar</a><a class="button secondary" href="/cadastro.html" data-guest>Criar conta</a>
-<span class="nav-session" data-session hidden><span data-user></span><button class="secondary" data-logout>Sair</button></span></nav></div></header><main id="main"><section class="intro"><div><p class="eyebrow">Seu próximo upgrade</p><h1>Um novo ritmo para<br>o seu setup.</h1><p>Encontre o essencial para estudar, trabalhar e jogar.</p></div><span class="pill">Explore. Escolha. Experimente.</span></section><div id="message" class="message" role="status" aria-live="polite" hidden></div>
-<section aria-labelledby="catalog-title"><div class="catalog-bar"><div><h2 id="catalog-title">Nossos produtos</h2><span id="product-count" class="muted">Carregando catálogo…</span></div><button id="reload" class="secondary">Atualizar</button></div><div id="products" class="grid" aria-busy="true"></div><div class="pagination"><button id="previous" class="secondary" disabled>Anterior</button><span id="page-number">Página 1</span><button id="next" class="secondary" disabled>Próxima</button></div></section></main><dialog id="confirm-dialog" aria-labelledby="dialog-title"><h2 id="dialog-title"></h2><p></p><form method="dialog" class="actions"><button class="secondary" value="cancel" autofocus>Cancelar</button><button value="confirm">Confirmar</button></form></dialog><footer><span><strong>dessik.</strong> Tecnologia para sua rotina.</span><span>Projeto acadêmico · Produtos e especificações fictícios</span></footer></body></html>
+<span class="nav-session" data-session hidden><span data-user></span><button class="secondary" data-logout>Sair</button></span></nav></div></header><main id="main"><section class="hero" aria-labelledby="hero-title">
+<div class="hero-copy"><span class="collection-label"><span></span> DESSIK ESSENTIALS / VOL. 01</span>
+<h1 id="hero-title">Seu espaço.<br>Seu estilo.<br><em>Seu próximo nível.</em></h1>
+<p>O essencial para transformar suas ideias em realidade. Tecnologia que combina com você.</p>
+<a class="button hero-button" href="#catalogo">Encontre seu upgrade <span aria-hidden="true">↗</span></a>
+<div class="hero-caption"><span>01 — 08</span> Uma seleção para criar, jogar e ir além.</div></div>
+<div class="hero-showcase"><span class="showcase-kicker">DESIGN QUE VOCÊ SENTE.</span>
+<div class="hero-product product-art art-headset" role="img" aria-label="Headset fictício preto com detalhes azuis"></div>
+<div class="showcase-bottom"><div><span>ÁUDIO / ESSENTIALS</span><strong>Headset Wave</strong></div><a href="#catalogo" aria-label="Explorar o catálogo">↙</a></div>
+</div></section>
+<div class="store-values" aria-label="Sobre a loja"><div><span aria-hidden="true">✳</span><p><strong>Escolhas com personalidade</strong><span>Do primeiro setup ao próximo upgrade</span></p></div><div><span aria-hidden="true">◇</span><p><strong>Estoque transparente</strong><span>Disponibilidade em cada produto</span></p></div><div><span aria-hidden="true">↗</span><p><strong>Explore sem compromisso</strong><span>Uma experiência de compra fictícia</span></p></div></div>
+<div id="demo-notice" class="demo-notice" hidden><span><strong>Catálogo demonstrativo</strong> · Produtos e preços fictícios. Compras disponíveis somente com a API e o banco conectados.</span><a href="/loja.html">Tentar loja conectada ↗</a></div>
+<div id="message" class="message" role="status" aria-live="polite" hidden></div>
+<section id="catalogo" aria-labelledby="catalog-title"><div class="catalog-bar"><div><p class="eyebrow">CURADORIA DESSIK</p><h2 id="catalog-title">Pequenos detalhes.<br>Grandes possibilidades.</h2><span id="product-count" class="muted">Carregando catálogo…</span></div><button id="reload" class="secondary">Atualizar catálogo ↻</button></div><div id="products" class="grid" aria-busy="true"></div><div class="pagination"><button id="previous" class="secondary" disabled>Anterior</button><span id="page-number">Página 1</span><button id="next" class="secondary" disabled>Próxima</button></div></section></main><dialog id="confirm-dialog" aria-labelledby="dialog-title"><h2 id="dialog-title"></h2><p></p><form method="dialog" class="actions"><button class="secondary" value="cancel" autofocus>Cancelar</button><button value="confirm">Confirmar</button></form></dialog><footer><span><strong>dessik.</strong> Tecnologia para sua rotina.</span><span>Projeto acadêmico · Produtos e especificações fictícios</span></footer></body></html>
 ```
 
 
@@ -1123,27 +1366,48 @@ setupSession();
 const grid = document.querySelector('#products');
 let offset = 0;
 const limit = 12;
+let demo = new URLSearchParams(location.search).get('demo') === '1';
+const productArt = new Map([
+  ['Notebook Horizon 14', 'notebook'], ['Mouse Pulse', 'mouse'],
+  ['Teclado mecânico Type', 'teclado'], ['Monitor View 24', 'monitor'],
+  ['Headset Wave', 'headset'], ['Webcam Focus', 'webcam'],
+  ['SSD Sprint 1 TB', 'ssd'], ['Memória RAM Flux 16 GB', 'ram'],
+]);
 function card(product) {
   const article = element('article', undefined, 'card');
+  const visual = element('div', undefined, 'product-visual');
   const image = element('img');
   image.src = product.imagem_url;
   image.alt = product.nome;
   image.loading = 'lazy';
   image.addEventListener('error', () => image.src = '/images/placeholder.svg', {once: true});
+  const art = productArt.get(product.nome);
+  if (art && ['/images/placeholder.svg', '/images/catalogo-dessik.png'].includes(product.imagem_url)) {
+    const sprite = element('div', undefined, `product-art art-${art}`);
+    sprite.setAttribute('role', 'img');
+    sprite.setAttribute('aria-label', `Ilustração de ${product.nome}`);
+    visual.append(sprite);
+  } else visual.append(image);
+  visual.append(element('span', product.quantidade_estoque ? 'Coleção Essentials' : 'Esgotado', 'product-tag'));
   const body = element('div', undefined, 'card-body');
-  body.append(element('p', `${product.categoria} · #${product.id_produto}`, 'category'),
+  body.append(element('p', product.categoria, 'category'),
     element('h3', product.nome), element('p', product.descricao, 'description'),
     element('p', money(product.preco), 'price'),
-    element('p', product.quantidade_estoque ? `${product.quantidade_estoque} unidades disponíveis` : 'Produto indisponível',
+    element('p', product.quantidade_estoque ? `${product.quantidade_estoque} unidades ${demo ? 'ilustrativas' : 'disponíveis'}` : 'Produto indisponível',
       product.quantidade_estoque ? 'stock' : 'stock out'));
   const row = element('div', undefined, 'buy-row');
   const quantity = element('input');
   quantity.type = 'number'; quantity.min = '1'; quantity.max = String(Math.min(product.quantidade_estoque, 1000)); quantity.value = '1';
   quantity.setAttribute('aria-label', `Quantidade de ${product.nome}`);
   quantity.disabled = product.quantidade_estoque === 0;
-  const button = element('button', product.quantidade_estoque ? 'Comprar' : 'Indisponível');
+  const button = element('button', demo ? 'Conhecer produto ↗' : product.quantidade_estoque ? 'Comprar ↗' : 'Indisponível');
+  if (demo) quantity.hidden = true;
   button.disabled = product.quantidade_estoque === 0;
   button.addEventListener('click', async () => {
+    if (demo) {
+      await confirmAction(product.nome, `${product.descricao} Preço fictício: ${money(product.preco)}. Para simular uma compra com estoque, configure o banco e abra a loja conectada.`, 'Entendi');
+      return;
+    }
     if (!sessionStorage.getItem('dessik_token')) { location.assign('/login.html'); return; }
     const amount = Number(quantity.value);
     if (!Number.isInteger(amount) || amount < 1 || !quantity.reportValidity()) {
@@ -1162,17 +1426,33 @@ function card(product) {
       if (error.status === 409) await loadProducts(false);
     } finally { button.disabled = product.quantidade_estoque === 0; }
   });
-  row.append(quantity, button); body.append(row); article.append(image, body);
+  row.append(quantity, button); body.append(row); article.append(visual, body);
   return article;
 }
 async function loadProducts(clear = true) {
   if (clear) message();
   grid.setAttribute('aria-busy', 'true');
   try {
-    const products = await apiRequest(`/produtos?limite=${limit}&offset=${offset}`);
+    let products;
+    if (demo) {
+      const response = await fetch('/data/produtos-demo.json');
+      if (!response.ok) throw new Error('Não foi possível abrir o catálogo demonstrativo.');
+      products = (await response.json()).slice(offset, offset + limit);
+    } else {
+      try {
+        products = await apiRequest(`/produtos?limite=${limit}&offset=${offset}`);
+      } catch (error) {
+        // Demonstração identificada; não representa estoque ou pedidos de um banco ativo.
+        demo = true;
+        message('A loja conectada está indisponível. Você está vendo apenas o catálogo demonstrativo.', '');
+        await loadProducts(false);
+        return;
+      }
+    }
+    document.querySelector('#demo-notice').hidden = !demo;
     grid.replaceChildren(...products.map(card));
     if (!products.length) grid.append(element('p', 'Nenhum produto nesta página.', 'empty'));
-    document.querySelector('#product-count').textContent = `${products.length} produtos nesta página`;
+    document.querySelector('#product-count').textContent = `${products.length} produtos para o seu próximo upgrade`;
     document.querySelector('#previous').disabled = offset === 0;
     document.querySelector('#next').disabled = products.length < limit;
     document.querySelector('#page-number').textContent = `Página ${offset / limit + 1}`;
@@ -1183,7 +1463,7 @@ async function loadProducts(clear = true) {
 }
 document.querySelector('#previous').onclick = () => { offset = Math.max(0, offset - limit); loadProducts(); };
 document.querySelector('#next').onclick = () => { offset += limit; loadProducts(); };
-document.querySelector('#reload').onclick = () => loadProducts();
+document.querySelector('#reload').onclick = () => { demo = false; offset = 0; loadProducts(); };
 loadProducts();
 ```
 
@@ -1192,8 +1472,8 @@ loadProducts();
 
 ```html
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Dessik: loja fictícia de tecnologia para um projeto acadêmico."><title>Entrar | Dessik</title><link rel="icon" href="/images/placeholder.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><script type="module" src="/js/login.js"></script></head>
-<body><a class="skip" href="#main">Pular para o conteúdo</a>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Dessik: loja fictícia de tecnologia para um projeto acadêmico."><title>Entrar | Dessik</title><link rel="icon" href="/images/placeholder.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/storefront.css"><script type="module" src="/js/login.js"></script></head>
+<body class="account-page"><a class="skip" href="#main">Pular para o conteúdo</a>
 <div class="topnote">Loja fictícia · Compras simuladas, sem cobrança</div>
 <header class="navbar"><div class="nav-inner"><a class="brand" href="/loja.html" aria-label="Dessik início">dessik<span>.</span></a>
 <nav aria-label="Navegação principal"><a href="/loja.html">Produtos</a><a href="/admin.html" data-admin hidden>Administração</a>
@@ -1206,14 +1486,26 @@ loadProducts();
 
 ```html
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Dessik: loja fictícia de tecnologia para um projeto acadêmico."><title>Loja | Dessik</title><link rel="icon" href="/images/placeholder.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><script type="module" src="/js/loja.js"></script></head>
-<body><a class="skip" href="#main">Pular para o conteúdo</a>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Dessik: loja fictícia de tecnologia para um projeto acadêmico."><title>Loja | Dessik</title><link rel="icon" href="/images/placeholder.svg" type="image/svg+xml"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/storefront.css"><script type="module" src="/js/loja.js"></script></head>
+<body class="store-page"><a class="skip" href="#main">Pular para o conteúdo</a>
 <div class="topnote">Loja fictícia · Compras simuladas, sem cobrança</div>
 <header class="navbar"><div class="nav-inner"><a class="brand" href="/loja.html" aria-label="Dessik início">dessik<span>.</span></a>
-<nav aria-label="Navegação principal"><a href="/loja.html">Produtos</a><a href="/admin.html" data-admin hidden>Administração</a>
+<nav aria-label="Navegação principal"><a href="/loja.html" aria-current="page">Explorar produtos</a><a href="/admin.html" data-admin hidden>Administração</a>
 <a href="/login.html" data-guest>Entrar</a><a class="button secondary" href="/cadastro.html" data-guest>Criar conta</a>
-<span class="nav-session" data-session hidden><span data-user></span><button class="secondary" data-logout>Sair</button></span></nav></div></header><main id="main"><section class="intro"><div><p class="eyebrow">Seu próximo upgrade</p><h1>Um novo ritmo para<br>o seu setup.</h1><p>Encontre o essencial para estudar, trabalhar e jogar.</p></div><span class="pill">Explore. Escolha. Experimente.</span></section><div id="message" class="message" role="status" aria-live="polite" hidden></div>
-<section aria-labelledby="catalog-title"><div class="catalog-bar"><div><h2 id="catalog-title">Nossos produtos</h2><span id="product-count" class="muted">Carregando catálogo…</span></div><button id="reload" class="secondary">Atualizar</button></div><div id="products" class="grid" aria-busy="true"></div><div class="pagination"><button id="previous" class="secondary" disabled>Anterior</button><span id="page-number">Página 1</span><button id="next" class="secondary" disabled>Próxima</button></div></section></main><dialog id="confirm-dialog" aria-labelledby="dialog-title"><h2 id="dialog-title"></h2><p></p><form method="dialog" class="actions"><button class="secondary" value="cancel" autofocus>Cancelar</button><button value="confirm">Confirmar</button></form></dialog><footer><span><strong>dessik.</strong> Tecnologia para sua rotina.</span><span>Projeto acadêmico · Produtos e especificações fictícios</span></footer></body></html>
+<span class="nav-session" data-session hidden><span data-user></span><button class="secondary" data-logout>Sair</button></span></nav></div></header><main id="main"><section class="hero" aria-labelledby="hero-title">
+<div class="hero-copy"><span class="collection-label"><span></span> DESSIK ESSENTIALS / VOL. 01</span>
+<h1 id="hero-title">Seu espaço.<br>Seu estilo.<br><em>Seu próximo nível.</em></h1>
+<p>O essencial para transformar suas ideias em realidade. Tecnologia que combina com você.</p>
+<a class="button hero-button" href="#catalogo">Encontre seu upgrade <span aria-hidden="true">↗</span></a>
+<div class="hero-caption"><span>01 — 08</span> Uma seleção para criar, jogar e ir além.</div></div>
+<div class="hero-showcase"><span class="showcase-kicker">DESIGN QUE VOCÊ SENTE.</span>
+<div class="hero-product product-art art-headset" role="img" aria-label="Headset fictício preto com detalhes azuis"></div>
+<div class="showcase-bottom"><div><span>ÁUDIO / ESSENTIALS</span><strong>Headset Wave</strong></div><a href="#catalogo" aria-label="Explorar o catálogo">↙</a></div>
+</div></section>
+<div class="store-values" aria-label="Sobre a loja"><div><span aria-hidden="true">✳</span><p><strong>Escolhas com personalidade</strong><span>Do primeiro setup ao próximo upgrade</span></p></div><div><span aria-hidden="true">◇</span><p><strong>Estoque transparente</strong><span>Disponibilidade em cada produto</span></p></div><div><span aria-hidden="true">↗</span><p><strong>Explore sem compromisso</strong><span>Uma experiência de compra fictícia</span></p></div></div>
+<div id="demo-notice" class="demo-notice" hidden><span><strong>Catálogo demonstrativo</strong> · Produtos e preços fictícios. Compras disponíveis somente com a API e o banco conectados.</span><a href="/loja.html">Tentar loja conectada ↗</a></div>
+<div id="message" class="message" role="status" aria-live="polite" hidden></div>
+<section id="catalogo" aria-labelledby="catalog-title"><div class="catalog-bar"><div><p class="eyebrow">CURADORIA DESSIK</p><h2 id="catalog-title">Pequenos detalhes.<br>Grandes possibilidades.</h2><span id="product-count" class="muted">Carregando catálogo…</span></div><button id="reload" class="secondary">Atualizar catálogo ↻</button></div><div id="products" class="grid" aria-busy="true"></div><div class="pagination"><button id="previous" class="secondary" disabled>Anterior</button><span id="page-number">Página 1</span><button id="next" class="secondary" disabled>Próxima</button></div></section></main><dialog id="confirm-dialog" aria-labelledby="dialog-title"><h2 id="dialog-title"></h2><p></p><form method="dialog" class="actions"><button class="secondary" value="cancel" autofocus>Cancelar</button><button value="confirm">Confirmar</button></form></dialog><footer><span><strong>dessik.</strong> Tecnologia para sua rotina.</span><span>Projeto acadêmico · Produtos e especificações fictícios</span></footer></body></html>
 ```
 
 ## ETAPA 7 — Variáveis de ambiente
@@ -2129,6 +2421,9 @@ def main():
         for filename in files_for_stage(number):
             path = ROOT / filename
             language = languages.get(path.suffix, "text")
+            if path.suffix in {".png", ".jpg", ".jpeg", ".webp"}:
+                output.append(f"\n### Arquivo: {filename}\n\nAsset de imagem: [{path.name}](../{filename}). Copie o arquivo binário junto com o projeto.\n")
+                continue
             output.append(f"\n### Arquivo: {filename}\n\n```{language}\n{path.read_text(encoding='utf-8').rstrip()}\n```\n")
     destination = ROOT / "docs" / "PROJETO_COMPLETO.md"
     destination.parent.mkdir(exist_ok=True)
