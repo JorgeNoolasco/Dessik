@@ -1,0 +1,8 @@
+.env
+.env.*
+.venv
+.local
+.git
+tests
+docs
+certs
