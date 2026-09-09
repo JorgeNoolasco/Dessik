@@ -1,4 +1,4 @@
-export const API_URL = "https://dessik-back-end.vercel.app"; // Mesma origem. Em hospedagens separadas, use a URL HTTPS da API.
+export const API_URL = "https://dessik-back-end.vercel.app/api"; // Mesma origem. Em hospedagens separadas, use a URL HTTPS da API.
 export const money = value => Number(value).toLocaleString('pt-BR', {
     style: 'currency',
     currency: 'BRL'
