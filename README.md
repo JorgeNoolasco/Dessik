@@ -1,5 +1,7 @@
 # Dessik — loja fictícia
 
+**Nova entrega acadêmica:** a versão solicitada com `publico/`, `privada/` e carrinho está em [workspace/README.md](workspace/README.md). Use esse guia para executar e apresentar a versão atual; o conteúdo abaixo documenta a versão anterior, preservada.
+
 Projeto acadêmico completo com cadastro, login, autenticação JWT, catálogo vindo do MySQL, CRUD administrativo, pedidos com atualização transacional de estoque e integração com ViaCEP. Compras são simulações: não há pagamento nem entrega.
 
 O front-end usa somente HTML5, CSS3 e JavaScript puro com `fetch()`. O back-end é Python com FastAPI e `mysql-connector-python`. Não há React, Node obrigatório, SQLite ou Docker obrigatório.

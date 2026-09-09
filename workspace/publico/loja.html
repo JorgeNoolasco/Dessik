@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <meta content="Dessik: loja fictícia de tecnologia para um projeto acadêmico." name="description"/>
+  <title>
+   Loja | Dessik
+  </title>
+  <link href="/imagens/placeholder.svg" rel="icon" type="image/svg+xml"/>
+  <link href="/css/style.css" rel="stylesheet"/>
+  <link href="/css/storefront.css?v=3" rel="stylesheet"/>
+  <script src="/js/loja.js?v=3" type="module">
+  </script>
+ </head>
+ <body class="store-page">
+  <a class="skip" href="#main">
+   Pular para o conteúdo
+  </a>
+  <div class="topnote">
+   SEU SETUP, SUAS REGRAS.
+   <span>
+    Loja fictícia · Sem cobranças reais
+   </span>
+  </div>
+  <header class="navbar">
+   <div class="nav-inner">
+    <a aria-label="Dessik início" class="brand" href="/index.html">
+     dessik
+     <span>
+      .
+     </span>
+    </a>
+    <nav aria-label="Navegação principal">
+     <a href="/index.html">
+      Início
+     </a>
+     <a href="/carrinho.html">
+      Carrinho
+     </a>
+     <a aria-current="page" href="/loja.html">
+      Explorar produtos
+     </a>
+     <a data-session="" hidden="" href="/pedidos.html">
+      Meus pedidos
+     </a>
+     <a data-admin="" hidden="" href="/admin.html">
+      Administração
+     </a>
+     <a data-guest="" href="/login.html">
+      Entrar
+     </a>
+     <a class="button secondary" data-guest="" href="/cadastro.html">
+      Criar conta
+     </a>
+     <span class="nav-session" data-session="" hidden="">
+      <span data-user="">
+      </span>
+      <button class="secondary" data-logout="">
+       Sair
+      </button>
+     </span>
+    </nav>
+   </div>
+  </header>
+  <main id="main">
+   <section aria-labelledby="hero-title" class="hero">
+    <div class="hero-copy">
+     <p class="collection-label">
+      TECNOLOGIA COM A SUA IDENTIDADE
+      <span>
+       DESSIK / 2026
+      </span>
+     </p>
+     <h1 id="hero-title">
+      MENOS LIMITES.
+      <br/>
+      <em>
+       MAIS VOCÊ.
+      </em>
+     </h1>
+     <p>
+      Do play ao próximo projeto. Encontre o que falta no seu setup e faça do seu jeito.
+     </p>
+     <a class="button hero-button" href="#catalogo">
+      Explorar coleção
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <span class="hero-caption">
+      ESSENTIALS COLLECTION — 2026
+     </span>
+    </div>
+    <div class="hero-showcase">
+     <span class="showcase-kicker">
+      EM DESTAQUE / ÁUDIO
+     </span>
+     <div aria-label="Ilustração do headset Wave preto com detalhes azuis" class="hero-product product-art art-headset" role="img">
+     </div>
+     <div class="showcase-bottom">
+      <div>
+       <span>
+        OUÇA CADA DETALHE.
+       </span>
+       <strong>
+        Headset Wave
+       </strong>
+      </div>
+      <a aria-label="Explorar produtos" href="#catalogo">
+       ↗
+      </a>
+     </div>
+    </div>
+   </section>
+   <div class="collection-strip">
+    <span>
+     FEITO PARA O SEU DIA A DIA
+    </span>
+    <span>
+     CRIAR
+     <b>
+      ✳
+     </b>
+     TRABALHAR
+     <b>
+      ✳
+     </b>
+     JOGAR
+     <b>
+      ✳
+     </b>
+     EXPLORAR
+    </span>
+   </div>
+   <div aria-live="polite" class="message" hidden="" id="message" role="status">
+   </div>
+   <section aria-labelledby="catalog-title" id="catalogo">
+    <div class="catalog-bar">
+     <div>
+      <p class="eyebrow">
+       O PRÓXIMO UPGRADE É SEU
+      </p>
+      <h2 id="catalog-title">
+       Encontre seu essencial
+       <span>
+        .
+       </span>
+      </h2>
+      <span aria-live="polite" class="muted" id="product-count">
+       Carregando produtos…
+      </span>
+     </div>
+     <button class="secondary" id="reload">
+      Atualizar ↻
+     </button>
+    </div>
+    <div class="catalog-tools">
+     <label class="search-box">
+      <span aria-hidden="true">
+       ⌕
+      </span>
+      <span class="sr-only">
+       Buscar produtos
+      </span>
+      <input autocomplete="off" id="search" maxlength="100" placeholder="O que falta no seu setup?" type="search"/>
+     </label>
+     <label class="sort-box">
+      <span>
+       Ordenar por
+      </span>
+      <select id="sort">
+       <option value="recentes">
+        Seleção Dessik
+       </option>
+       <option value="menor-preco">
+        Menor preço
+       </option>
+       <option value="maior-preco">
+        Maior preço
+       </option>
+      </select>
+     </label>
+    </div>
+    <div aria-label="Filtrar por categoria" class="category-tabs" role="group">
+     <button aria-pressed="true" data-category="">
+      Todos os produtos
+     </button>
+     <button aria-pressed="false" data-category="Computadores">
+      Computadores
+     </button>
+     <button aria-pressed="false" data-category="Periféricos">
+      Periféricos
+     </button>
+     <button aria-pressed="false" data-category="Monitores">
+      Monitores
+     </button>
+     <button aria-pressed="false" data-category="Áudio">
+      Áudio
+     </button>
+     <button aria-pressed="false" data-category="Acessórios">
+      Acessórios
+     </button>
+     <button aria-pressed="false" data-category="Componentes">
+      Componentes
+     </button>
+    </div>
+    <div aria-busy="true" class="grid" id="products">
+    </div>
+    <div class="pagination">
+     <button class="secondary" disabled="" id="previous">
+      Anterior
+     </button>
+     <span id="page-number">
+      Página 1
+     </span>
+     <button class="secondary" disabled="" id="next">
+      Próxima
+     </button>
+    </div>
+   </section>
+  </main>
+  <dialog aria-labelledby="dialog-title" id="confirm-dialog">
+   <h2 id="dialog-title">
+   </h2>
+   <p>
+   </p>
+   <form class="actions" method="dialog">
+    <button autofocus="" class="secondary" value="cancel">
+     Cancelar
+    </button>
+    <button value="confirm">
+     Confirmar
+    </button>
+   </form>
+  </dialog>
+  <footer>
+   <div class="footer-main">
+    <div>
+     <a class="brand" href="/index.html">
+      dessik
+      <span>
+       .
+      </span>
+     </a>
+     <p>
+      Tecnologia para quem faz
+      <br/>
+      do próprio jeito.
+     </p>
+    </div>
+    <div class="footer-links">
+     <a href="/loja.html">
+      Explorar produtos
+     </a>
+     <a href="/login.html">
+      Minha conta
+     </a>
+     <a href="/cadastro.html">
+      Criar conta
+     </a>
+    </div>
+   </div>
+   <div class="footer-bottom">
+    <span>
+     © 2026 Dessik. Projeto acadêmico.
+    </span>
+    <span>
+     Produtos fictícios. Compras simuladas. Nenhuma cobrança.
+    </span>
+   </div>
+  </footer>
+ </body>
+</html>

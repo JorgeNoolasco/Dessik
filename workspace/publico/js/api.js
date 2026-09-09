@@ -1,0 +1,105 @@
+export const API_URL = "/api"; // Mesma origem. Em hospedagens separadas, use a URL HTTPS da API.
+export const money = value => Number(value).toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+});
+
+export async function apiRequest(path, {
+    method = 'GET',
+    body,
+    auth = false
+} = {}) {
+    const headers = {};
+    if (body !== undefined) headers['Content-Type'] = 'application/json';
+    if (auth) {
+        const token = sessionStorage.getItem('dessik_token');
+        if (!token) throw new Error('Entre na sua conta para continuar.');
+        headers.Authorization = `Bearer ${token}`;
+    }
+    let response;
+    try {
+        response = await fetch(`${API_URL}${path}`, {
+            method,
+            headers,
+            cache: 'no-store',
+            body: body === undefined ? undefined : JSON.stringify(body)
+        });
+    } catch {
+        throw new Error('Sem conexão com a loja. Verifique sua internet e tente novamente.');
+    }
+    let data;
+    try {
+        data = await response.json();
+    } catch {
+        throw new Error('O servidor não respondeu corretamente. Tente novamente.');
+    }
+    if (!response.ok) {
+        if (response.status === 401 && auth) sessionStorage.removeItem('dessik_token');
+        const detail = data.erros?.map(item => `${item.campo || 'Dados'}: ${item.mensagem}`).join(' ');
+        const error = new Error(detail || data.mensagem || 'Não foi possível concluir a operação.');
+        error.status = response.status;
+        throw error;
+    }
+    return data;
+}
+
+export function message(text = '', kind = 'error', target = document.querySelector('#message')) {
+    target.textContent = text;
+    target.className = `message ${kind}`;
+    target.hidden = !text;
+}
+
+export function element(tag, text, className) {
+    const node = document.createElement(tag);
+    if (text !== undefined) node.textContent = text; // Dados do banco nunca viram HTML executável.
+    if (className) node.className = className;
+    return node;
+}
+
+export async function setupSession(required = false, admin = false) {
+    if (sessionStorage.getItem('dessik_login_ok')) {
+        sessionStorage.removeItem('dessik_login_ok');
+        message('Login realizado com sucesso.', 'success');
+    }
+    const token = sessionStorage.getItem('dessik_token');
+    if (!token) {
+        if (required) location.replace('/login.html');
+        return null;
+    }
+    try {
+        const user = await apiRequest('/me', {
+            auth: true
+        });
+        document.querySelectorAll('[data-guest]').forEach(el => el.hidden = true);
+        document.querySelectorAll('[data-session]').forEach(el => el.hidden = false);
+        document.querySelectorAll('[data-admin]').forEach(el => el.hidden = !user.is_admin);
+        document.querySelectorAll('[data-user]').forEach(el => el.textContent = user.nome.split(' ')[0]);
+        document.querySelectorAll('[data-logout]').forEach(el => el.onclick = () => {
+            sessionStorage.removeItem('dessik_token');
+            location.assign('/login.html');
+        });
+        if (admin && !user.is_admin) throw new Error('Esta área está disponível apenas para administradores.');
+        return user;
+    } catch (error) {
+        if (error.status === 401) {
+            sessionStorage.removeItem('dessik_token');
+            if (required) location.replace('/login.html');
+        }
+        if (required) message(error.message);
+        return null;
+    }
+}
+
+export function confirmAction(title, description, action = 'Confirmar') {
+    return new Promise(resolve => {
+        const dialog = document.querySelector('#confirm-dialog');
+        dialog.querySelector('h2').textContent = title;
+        dialog.querySelector('p').textContent = description;
+        dialog.querySelector('[value="confirm"]').textContent = action;
+        dialog.returnValue = 'cancel';
+        dialog.addEventListener('close', () => resolve(dialog.returnValue === 'confirm'), {
+            once: true
+        });
+        dialog.showModal();
+    });
+}

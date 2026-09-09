@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <meta content="Dessik: loja fictícia de tecnologia para um projeto acadêmico." name="description"/>
+  <title>
+   Entrar | Dessik
+  </title>
+  <link href="/imagens/placeholder.svg" rel="icon" type="image/svg+xml"/>
+  <link href="/css/style.css" rel="stylesheet"/>
+  <link href="/css/storefront.css?v=3" rel="stylesheet"/>
+  <script src="/js/login.js" type="module">
+  </script>
+ </head>
+ <body class="account-page">
+  <a class="skip" href="#main">
+   Pular para o conteúdo
+  </a>
+  <div class="topnote">
+   SEU SETUP, SUAS REGRAS.
+   <span>
+    Loja fictícia · Sem cobranças reais
+   </span>
+  </div>
+  <header class="navbar">
+   <div class="nav-inner">
+    <a aria-label="Dessik início" class="brand" href="/index.html">
+     dessik
+     <span>
+      .
+     </span>
+    </a>
+    <nav aria-label="Navegação principal">
+     <a href="/index.html">
+      Início
+     </a>
+     <a href="/carrinho.html">
+      Carrinho
+     </a>
+     <a href="/loja.html">
+      Produtos
+     </a>
+     <a data-session="" hidden="" href="/pedidos.html">
+      Meus pedidos
+     </a>
+     <a data-admin="" hidden="" href="/admin.html">
+      Administração
+     </a>
+     <a data-guest="" href="/login.html">
+      Entrar
+     </a>
+     <a class="button secondary" data-guest="" href="/cadastro.html">
+      Criar conta
+     </a>
+     <span class="nav-session" data-session="" hidden="">
+      <span data-user="">
+      </span>
+      <button class="secondary" data-logout="">
+       Sair
+      </button>
+     </span>
+    </nav>
+   </div>
+  </header>
+  <main id="main">
+   <div class="form-layout">
+    <section class="form-intro">
+     <p class="eyebrow">
+      Bom ter você de volta
+     </p>
+     <h1>
+      Seu setup começa
+      <br/>
+      por aqui.
+     </h1>
+     <p>
+      Entre na sua conta para explorar os produtos e simular sua próxima compra.
+     </p>
+     <a href="/loja.html">
+      ← Continuar explorando
+     </a>
+    </section>
+    <section class="form-panel">
+     <h2>
+      Entrar na conta
+     </h2>
+     <div aria-live="polite" class="message" hidden="" id="message" role="status">
+     </div>
+     <form id="login-form">
+      <div class="fields">
+       <label>
+        E-mail
+        <input autocomplete="email" maxlength="254" name="email" required="" type="email"/>
+       </label>
+       <label>
+        Senha
+        <input autocomplete="current-password" maxlength="72" name="senha" required="" type="password"/>
+       </label>
+      </div>
+      <div class="actions">
+       <button class="full" type="submit">
+        Entrar
+       </button>
+      </div>
+     </form>
+     <p class="form-foot">
+      Ainda não tem conta?
+      <a href="/cadastro.html">
+       Cadastre-se
+      </a>
+     </p>
+    </section>
+   </div>
+  </main>
+  <dialog aria-labelledby="dialog-title" id="confirm-dialog">
+   <h2 id="dialog-title">
+   </h2>
+   <p>
+   </p>
+   <form class="actions" method="dialog">
+    <button autofocus="" class="secondary" value="cancel">
+     Cancelar
+    </button>
+    <button value="confirm">
+     Confirmar
+    </button>
+   </form>
+  </dialog>
+  <footer>
+   <div class="footer-main">
+    <div>
+     <a class="brand" href="/index.html">
+      dessik
+      <span>
+       .
+      </span>
+     </a>
+     <p>
+      Tecnologia para quem faz
+      <br/>
+      do próprio jeito.
+     </p>
+    </div>
+    <div class="footer-links">
+     <a href="/loja.html">
+      Explorar produtos
+     </a>
+     <a href="/login.html">
+      Minha conta
+     </a>
+     <a href="/cadastro.html">
+      Criar conta
+     </a>
+    </div>
+   </div>
+   <div class="footer-bottom">
+    <span>
+     © 2026 Dessik. Projeto acadêmico.
+    </span>
+    <span>
+     Produtos fictícios. Compras simuladas. Nenhuma cobrança.
+    </span>
+   </div>
+  </footer>
+ </body>
+</html>
