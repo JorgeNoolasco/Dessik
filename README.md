@@ -1,140 +1,57 @@
-# Dessik — loja virtual acadêmica
+# Dessik — front-end
 
-Esta é a entrega correspondente ao pedido: HTML, CSS e JavaScript puro, FastAPI e MySQL, com carrinho, estoque, pedidos, cadastro, login, ViaCEP e CRUD administrativo. Compras são simulações, sem pagamento ou entrega.
+HTML organiza as páginas, CSS define a aparência e JavaScript busca dados e responde aos cliques. Não há React, Bootstrap ou outra biblioteca de interface.
 
-Os arquivos anteriores na raiz do repositório foram preservados. **Para estudar e executar esta versão, use somente `workspace/`.** Não misture seu schema com o banco da versão anterior: esta entrega usa `tipo_usuario` (`cliente` ou `admin`).
+## Como abrir
 
-```text
-workspace/
-├── publico/                 # Páginas, CSS, JavaScript e imagens
-│   ├── index.html
-│   ├── cadastro.html
-│   ├── login.html
-│   ├── loja.html
-│   ├── carrinho.html
-│   ├── admin.html
-│   ├── pedidos.html         # Histórico do próprio usuário
-│   ├── css/
-│   ├── js/
-│   ├── imagens/
-│   └── README.md
-├── privada/
-│   ├── api/index.py         # Entrada da Vercel
-│   ├── backend/
-│   │   ├── main.py          # Rotas da API
-│   │   ├── database.py      # Configuração, conexão e transação
-│   │   ├── auth.py          # bcrypt, JWT e permissão de admin
-│   │   ├── models.py        # Converte preço para JSON, sem ORM
-│   │   └── schemas.py       # Valida os dados recebidos
-│   ├── database/schema.sql
-│   ├── database/dados.sql
-│   ├── tests/
-│   ├── .env.example
-│   ├── requirements.txt
-│   ├── vercel.json
-│   └── README.md
-└── CODIGO_COMPLETO.md       # Código textual integral, arquivo por arquivo
+Primeiro execute o back-end conforme [privada/README.md](../privada/README.md). Abra **http://127.0.0.1:8000**. FastAPI serve esta pasta e a API no mesmo endereço. Não abra por duplo clique (`file://`): módulos JavaScript e requisições precisam de um servidor HTTP.
+
+Opcionalmente, para hospedar o front-end separado, execute nesta pasta:
+
+```powershell
+python -m http.server 5500 --bind 127.0.0.1
 ```
 
-Comece pelo [guia do back-end](privada/README.md) para configurar o MySQL e executar a loja. Depois leia o [guia do front-end](publico/README.md).
+Nesse caso, mude somente a constante em `js/api.js`:
 
-## Como as partes conversam
+```javascript
+export const API_URL = "http://127.0.0.1:8000/api";
+```
 
-1. O navegador abre um HTML e executa JavaScript.
-2. `fetch()` pede os produtos à API.
-3. FastAPI executa um SELECT parametrizado no MySQL.
-4. O banco devolve os dados e a API os envia como JSON.
-5. JavaScript cria os cards usando `textContent`.
+Abra http://127.0.0.1:5500. A API deve permitir essa origem em `CORS_ORIGINS`. O padrão da entrega é `API_URL = "/api"`, pois tudo roda na mesma origem. Na publicação separada, coloque a URL **HTTPS** do seu back-end nessa constante.
 
-JSON é um formato de texto para transportar informações. Exemplo: `{"id_produto":2,"quantidade":1}`. Ele não protege dados sozinho; autenticação, validação e HTTPS têm esse papel.
+## O que cada arquivo faz
 
-No carrinho, o navegador guarda somente IDs e quantidades em `sessionStorage`. Os itens sobrevivem à navegação na mesma aba. Fechar a aba encerra esse armazenamento. O carrinho não reserva estoque.
-
-Ao finalizar, a API identifica o usuário pelo JWT, consulta os preços e bloqueia as linhas dos produtos com `FOR UPDATE`. Ela cria o pedido, insere os itens e reduz o estoque na mesma transação. Se faltar um produto ou estoque, ocorre `rollback`: nenhuma parte da compra fica registrada. Valores monetários usam `Decimal`, evitando erros de centavos no Python.
-
-## COMO APRESENTAR O PROJETO
-
-“Criei a Dessik como uma loja fictícia para estudar desenvolvimento web.”
-
-“O front-end usa HTML para estruturar, CSS para estilizar e JavaScript para interagir. Não usei frameworks no navegador.”
-
-“O JavaScript usa fetch para conversar com minha API FastAPI. Os produtos vêm do MySQL em JSON; não estão escritos no HTML.”
-
-“Minha API tem funções pequenas e SQL visível. O schema mostra as quatro tabelas e suas relações.”
-
-“O carrinho junta produtos. Na compra, o servidor consulta os preços verdadeiros e verifica o estoque antes de salvar tudo.”
-
-“Usei bcrypt para proteger senhas, JWT com expiração, variáveis de ambiente e queries parametrizadas. Esconder um botão de admin não basta: o servidor também verifica a permissão.”
-
-“A transação impede que uma compra fique pela metade. Os bloqueios também impedem duas pessoas de comprar a mesma última unidade.”
-
-## Roteiro de demonstração e testes funcionais
-
-| Passo | Ação | Resultado esperado |
-| --- | --- | --- |
-| 1 | Abrir a página inicial | Marca Dessik, apresentação, destaques e benefícios |
-| 2 | Abrir cadastro, informar nome e e-mail válidos | Formulário organizado |
-| 3 | Informar CEP `01001000` e sair do campo | Endereço preenchido pelo ViaCEP; pode corrigir manualmente |
-| 4 | Sugerir senha, guardar e cadastrar | Conta criada; redirecionamento para login |
-| 5 | Fazer login | Sessão iniciada, saudação e botão Sair |
-| 6 | Abrir loja e buscar Mouse | Produtos da API; categoria e preço visíveis |
-| 7 | Filtrar Acessórios | Apenas produtos da categoria |
-| 8 | Ver Hub e Webcam | Aviso de estoque baixo e botão desabilitado no esgotado |
-| 9 | Comprar Mouse (2) e Teclado (1) | Mensagem de item adicionado; nenhuma compra registrada ainda |
-| 10 | Abrir carrinho, mudar quantidade e remover um item | Subtotal e total atualizados |
-| 11 | Finalizar pedido | Número do pedido, total do servidor e carrinho vazio |
-| 12 | Voltar à loja e atualizar | Estoque reduzido pela quantidade comprada |
-| 13 | Abrir Meus pedidos | Somente pedidos do usuário atual |
-| 14 | Promover sua conta conforme o README privado | Papel admin no banco |
-| 15 | Entrar em Administração e criar produto temporário | Novo produto aparece no catálogo |
-| 16 | Editar preço/estoque e excluir esse produto | CRUD completo; exclusão pede confirmação |
-| 17 | Mostrar as tabelas no MySQL Workbench | Relacionamento entre usuários, pedidos e itens |
-| 18 | Mostrar auth.py, SQL parametrizado e .gitignore | Explicar as proteções de segurança |
-
-Produto que já pertence a um pedido não pode ser excluído: a API retorna 409 para preservar o histórico. Para retirá-lo de venda, ajuste seu estoque para zero.
-
-## Testes seguros de Cybersecurity
-
-Faça estes testes apenas nesta aplicação local, com dados fictícios.
-
-| Teste | Resultado esperado |
+| Arquivo | Função |
 | --- | --- |
-| POST/PUT/DELETE de produto sem JWT | 401 |
-| DELETE com JWT de cliente | 403 |
-| Produto com estoque `-1`, autenticado como admin | 422 |
-| Cadastro com e-mail `invalido` | 422 sem ecoar a senha |
-| Cadastro incluindo `tipo_usuario: "admin"` | 422; cadastro público não escolhe papel |
-| JWT adulterado ou expirado | 401 |
-| Pedido com quantidade negativa ou produto repetido | 422 |
-| Pedido contendo um campo `preco` | 422; cliente só envia IDs e quantidades |
-| Dois pedidos para uma última unidade | Um sucesso e um conflito; estoque termina em zero |
-| Conferir `senha_hash` no banco de teste | Hash bcrypt, nunca senha legível |
-| GET `/.env` ou `/privada/.env` | 404 |
-| Parar banco de teste e consultar produtos | 503 com mensagem genérica |
-| `git check-ignore privada/.env` a partir de workspace | Caminho listado como ignorado |
-| `git ls-files -- privada/.env` | Nenhuma saída; arquivo não rastreado |
+| `index.html` | Apresentação da loja, quatro destaques vindos da API e benefícios |
+| `loja.html` | Catálogo com busca, categorias, paginação e estoque |
+| `cadastro.html` | Nome, e-mail, senha, confirmação e endereço |
+| `login.html` | Entrada com e-mail e senha |
+| `carrinho.html` | Itens, quantidades, subtotais e finalização |
+| `admin.html` | Formulário e tabela para criar, editar e excluir produtos |
+| `pedidos.html` | Histórico de pedidos da conta logada |
+| `css/style.css` | Estrutura: grids, formulários, cards e responsividade |
+| `css/storefront.css` | Identidade Dessik e detalhes visuais compartilhados |
+| `js/api.js` | Centraliza `API_URL`, `fetch`, mensagens, sessão e criação segura de elementos |
+| `js/loja.js` | Busca produtos, desenha cards e adiciona itens ao carrinho; também carrega os destaques |
+| `js/carrinho.js` | Guarda IDs/quantidades na aba, consulta preços e envia o pedido |
+| `js/cadastro.js` | Sugere senha, consulta CEP pela API e envia cadastro |
+| `js/login.js` | Recebe o JWT e guarda na sessão da aba |
+| `js/admin.js` | CRUD; a API verifica novamente se o usuário é admin |
+| `js/pedidos.js` | Exibe os pedidos do próprio usuário |
+| `imagens/` | Ilustrações locais de produtos e imagem de substituição |
 
-Os testes automatizados ficam em `privada/tests/`. Leia as instruções antes de habilitar testes de integração; eles criam dados e exigem banco isolado terminado em `_test`.
+`fetch()` faz uma requisição HTTP. `await response.json()` transforma o texto JSON em dados que o JavaScript consegue usar. `element()` cria elementos e preenche `textContent`: nomes e descrições recebidos não são interpretados como HTML.
 
-## Limites e validação da entrega
+Os oito primeiros produtos usam uma imagem com oito ilustrações. O CSS seleciona a região apropriada para cada card. Os quatro acessórios adicionais usam SVGs locais editáveis. Os arquivos de imagem fazem parte da entrega; não dependem de um serviço externo para abrir.
 
-API: 43 testes passaram, incluindo integração com banco, compra de vários itens, rejeição de preço adulterado e concorrência. O teste de navegador foi executado separadamente: fluxo real de cadastro, login, criação administrativa, carrinho e compra passou em Edge headless. As seis páginas principais foram verificadas sem rolagem horizontal em larguras de 390 e 768 pixels. A página inicial também foi inspecionada por captura em 1440 pixels.
+## Segurança no navegador
 
-O ambiente local fornecia **MariaDB 11.4**, usado nos testes via `mysql-connector-python`. O SQL é destinado a **MySQL 8.0.16+**; ainda é necessário repetir os testes no MySQL escolhido para publicação. O ViaCEP tem testes de sucesso, CEP inexistente, resposta inválida e timeout usando respostas controladas. A consulta real do CEP `01001000` também retornou HTTP 200 e o endereço de São Paulo nesta revisão. A disponibilidade do serviço externo depende da rede.
+Tudo enviado ao navegador deve ser considerado público. Não coloque `.env`, senha do MySQL, `JWT_SECRET` ou chave secreta nesta pasta. A URL da API pode ser pública; suas credenciais não.
 
-A configuração de Vercel foi preparada, mas não publicada nesta tarefa. O projeto demonstra proteção básica; não inclui recuperação de senha, verificação de e-mail ou limite distribuído de tentativas de login. O JWT é guardado na sessão da aba e ainda seria acessível a um script malicioso; por isso, evitar XSS continua essencial. JWT assinado não é criptografado: não coloque segredos dentro dele.
+O token retornado após login é uma credencial temporária do usuário e não faz parte dos arquivos do repositório. Ele fica em `sessionStorage`. Sair remove o token. O carrinho usa o mesmo armazenamento, mas contém somente IDs e quantidades, sem dados de pagamento.
 
-## Tabela de segurança
+Esconder Administração melhora a interface; não protege a API. O servidor valida o JWT e o papel do usuário em cada operação. Preço, estoque e total vistos no carrinho são uma estimativa até o servidor confirmar a compra. Se o estoque mudar, a API recusa a compra e o carrinho consulta os dados atualizados.
 
-| Risco | Proteção |
-| --- | --- |
-| SQL Injection | Queries parametrizadas |
-| Vazamento de senha | bcrypt com salt |
-| Credenciais no código | `.env` ignorado pelo Git |
-| Acesso administrativo indevido | JWT + `tipo_usuario` consultado no banco |
-| Alteração de preço pelo navegador | Valor calculado no back-end |
-| Estoque negativo | Validação, bloqueio e atualização na transação |
-| XSS | `textContent`, validação de imagens e CSP local |
-| Token inválido | Validação da assinatura e expiração JWT |
-| Dados interceptados | HTTPS na publicação e TLS no MySQL remoto |
-| Erros expondo informações | Mensagens genéricas, sem senha nem SQL |
+Para modificar a aparência, comece pelas variáveis e pelas seções comentadas em `storefront.css`. Para mudar produtos, use o administrador ou o banco: não escreva cards fixos no HTML.
