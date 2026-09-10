@@ -1,7 +1,9 @@
+// Vitrine: cartões, busca, categorias, ordenação e paginação de produtos.
 import {
     adicionarProduto
 } from './carrinho.js';
 import {
+    siteUrl,
     apiRequest,
     message,
     money,
@@ -27,14 +29,18 @@ const productArt = new Map([
     ['Memória RAM Flux 16 GB', 'ram'],
 ]);
 
+// Monta um cartão acessível com imagem, preço, estoque e seleção de quantidade.
 function card(product) {
     const article = element('article', undefined, 'card');
     const visual = element('div', undefined, 'product-visual');
     const image = element('img');
-    image.src = product.imagem_url;
+    // Imagens locais pertencem ao projeto; URLs externas são mantidas.
+    image.src = /^\/?imagens\//.test(product.imagem_url)
+        ? siteUrl(product.imagem_url.replace(/^\//, ''))
+        : product.imagem_url;
     image.alt = product.nome;
     image.loading = 'lazy';
-    image.addEventListener('error', () => image.src = '/imagens/placeholder.svg', {
+    image.addEventListener('error', () => image.src = siteUrl('imagens/placeholder.svg'), {
         once: true
     });
     const art = productArt.get(product.nome);
@@ -78,7 +84,9 @@ function card(product) {
     article.append(visual, body);
     return article;
 }
+// Busca a página de produtos e atualiza a listagem e os botões de paginação.
 async function loadProducts(clear = true) {
+    // Ignora respostas antigas quando uma busca mais recente já foi iniciada.
     const version = ++requestVersion;
     if (clear) message();
     grid.setAttribute('aria-busy', 'true');
@@ -102,9 +110,11 @@ async function loadProducts(clear = true) {
         grid.replaceChildren(element('p', 'Não foi possível carregar o catálogo.', 'empty'));
         message(error.message);
     } finally {
+        // Restaura os controles mesmo quando a operação falha.
         if (version === requestVersion) grid.setAttribute('aria-busy', 'false');
     }
 }
+// Aguarda 250 ms sem digitação antes de buscar, reduzindo as requisições.
 let searchTimer;
 search.addEventListener('input', () => {
     clearTimeout(searchTimer);
@@ -115,6 +125,7 @@ search.addEventListener('input', () => {
         loadProducts();
     }, 250);
 });
+// Reinicia a paginação quando a ordenação muda.
 sort.addEventListener('change', () => {
     offset = 0;
     loadProducts();
@@ -125,10 +136,12 @@ document.querySelectorAll('[data-category]').forEach(button => button.addEventLi
     offset = 0;
     loadProducts();
 }));
+// Volta uma página sem permitir deslocamento negativo.
 document.querySelector('#previous').onclick = () => {
     offset = Math.max(0, offset - limit);
     loadProducts();
 };
+// Avança a listagem pelo limite de produtos por página.
 document.querySelector('#next').onclick = () => {
     offset += limit;
     loadProducts();

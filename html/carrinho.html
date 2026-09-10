@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+ <!-- Metadados e recursos. Caminhos relativos permitem publicar o projeto também em subpastas. -->
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -7,10 +8,11 @@
   <title>
    Carrinho | Dessik
   </title>
-  <link href="/imagens/placeholder.svg" rel="icon" type="image/svg+xml"/>
-  <link href="/css/style.css" rel="stylesheet"/>
-  <link href="/css/storefront.css?v=3" rel="stylesheet"/>
-  <script src="/js/carrinho.js" type="module">
+  <link href="../imagens/placeholder.svg" rel="icon" type="image/svg+xml"/>
+  <link href="../css/style.css" rel="stylesheet"/>
+  <link href="../css/storefront.css?v=3" rel="stylesheet"/>
+  <!-- Módulo da página: importa os utilitários compartilhados. Execute usando um servidor HTTP. -->
+  <script src="../js/carrinho.js" type="module">
   </script>
  </head>
  <body class="store-page">
@@ -23,6 +25,7 @@
     Loja fictícia · Sem cobranças reais
    </span>
   </div>
+  <!-- Navegação compartilhada: data-guest, data-session e data-admin são atualizados conforme a sessão. -->
   <header class="navbar">
    <div class="nav-inner">
     <a aria-label="Dessik início" class="brand" href="../index.html">
@@ -35,22 +38,22 @@
      <a href="../index.html">
       Início
      </a>
-     <a aria-current="page" href="/carrinho.html">
+     <a aria-current="page" href="carrinho.html">
       Carrinho
      </a>
-     <a href="/loja.html">
+     <a href="loja.html">
       Explorar produtos
      </a>
-     <a data-session="" hidden="" href="/pedidos.html">
+     <a data-session="" hidden="" href="pedidos.html">
       Meus pedidos
      </a>
-     <a data-admin="" hidden="" href="/admin.html">
+     <a data-admin="" hidden="" href="admin.html">
       Administração
      </a>
-     <a data-guest="" href="/login.html">
+     <a data-guest="" href="login.html">
       Entrar
      </a>
-     <a class="button secondary" data-guest="" href="/cadastro.html">
+     <a class="button secondary" data-guest="" href="cadastro.html">
       Criar conta
      </a>
      <span class="nav-session" data-session="" hidden="">
@@ -63,7 +66,9 @@
     </nav>
    </div>
   </header>
+  <!-- Conteúdo principal. Os IDs identificam os elementos manipulados pelo JavaScript. -->
   <main id="main">
+   <!-- Seção que agrupa conteúdo e controles relacionados. -->
    <section class="intro">
     <div>
      <p class="eyebrow">
@@ -79,13 +84,15 @@
       Confira seus produtos e finalize a compra simulada.
      </p>
     </div>
-    <a class="button secondary" href="/loja.html">
+    <a class="button secondary" href="loja.html">
      Continuar comprando ↗
     </a>
    </section>
+   <!-- área preenchida pelo JavaScript com dados ou mensagens da API. -->
    <div aria-live="polite" class="message" hidden="" id="message" role="status">
    </div>
    <div class="cart-layout">
+    <!-- Seção que agrupa conteúdo e controles relacionados. -->
     <section aria-label="Itens do carrinho" id="cart-items">
     </section>
     <aside class="form-panel">
@@ -108,16 +115,17 @@
       <button class="secondary" id="refresh-cart">
        Atualizar carrinho
       </button>
-      <a hidden="" href="/login.html" id="cart-login">
+      <a hidden="" href="login.html" id="cart-login">
        Entrar na minha conta
       </a>
-      <a href="/pedidos.html">
+      <a href="pedidos.html">
        Meus pedidos
       </a>
      </div>
     </aside>
    </div>
   </main>
+  <!-- Rodapé com atalhos para o catálogo e a conta. -->
   <footer>
    <div class="footer-main">
     <div>
@@ -134,13 +142,13 @@
      </p>
     </div>
     <div class="footer-links">
-     <a href="/loja.html">
+     <a href="loja.html">
       Explorar produtos
      </a>
-     <a href="/login.html">
+     <a href="login.html">
       Minha conta
      </a>
-     <a href="/cadastro.html">
+     <a href="cadastro.html">
       Criar conta
      </a>
     </div>

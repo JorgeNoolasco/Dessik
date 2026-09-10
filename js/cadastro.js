@@ -1,4 +1,6 @@
+// Cadastro: valida senhas, consulta CEP e envia os dados à API.
 import {
+    siteUrl,
     apiRequest,
     message,
     setupSession
@@ -9,12 +11,14 @@ const cepMessage = document.querySelector('#cep-message');
 const senha = form.elements.senha;
 const confirmation = form.elements.confirmar_senha;
 
+// Confere a confirmação e o tamanho em bytes, integrando os erros à validação nativa.
 function validatePasswords() {
     confirmation.setCustomValidity(confirmation.value && confirmation.value !== senha.value ? 'As senhas não coincidem.' : '');
     senha.setCustomValidity(new TextEncoder().encode(senha.value).length > 72 ? 'Use no máximo 72 bytes na senha.' : '');
 }
 senha.addEventListener('input', validatePasswords);
 confirmation.addEventListener('input', validatePasswords);
+// Solicita uma sugestão de senha e preenche também a confirmação.
 document.querySelector('#generate-password').addEventListener('click', async event => {
     const button = event.currentTarget;
     button.disabled = true;
@@ -27,9 +31,11 @@ document.querySelector('#generate-password').addEventListener('click', async eve
     } catch (error) {
         message(error.message);
     } finally {
+        // Restaura os controles mesmo quando a operação falha.
         button.disabled = false;
     }
 });
+// Consulta o CEP normalizado e preenche os campos do endereço.
 document.querySelector('#lookup-cep').addEventListener('click', async event => {
     const value = form.elements.cep.value.replace(/\D/g, '');
     if (value.length !== 8) return message('Informe os 8 números do CEP.', 'error', cepMessage);
@@ -45,9 +51,11 @@ document.querySelector('#lookup-cep').addEventListener('click', async event => {
     } catch (error) {
         message(error.message, 'error', cepMessage);
     } finally {
+        // Restaura os controles mesmo quando a operação falha.
         button.disabled = false;
     }
 });
+// Envia pela API sem recarregar a página; o botão é bloqueado durante o envio.
 form.addEventListener('submit', async event => {
     event.preventDefault();
     validatePasswords();
@@ -62,10 +70,11 @@ form.addEventListener('submit', async event => {
             method: 'POST',
             body
         });
-        location.assign('/login.html?cadastro=ok');
+        location.assign(siteUrl('html/login.html?cadastro=ok'));
     } catch (error) {
         message(error.message);
     } finally {
+        // Restaura os controles mesmo quando a operação falha.
         button.disabled = false;
     }
 });

@@ -1,3 +1,4 @@
+// Carrinho: guarda IDs e quantidades na aba; consulta preços e estoque na API.
 import {
     apiRequest,
     element,
@@ -7,6 +8,7 @@ import {
 } from './api.js';
 
 // Apenas IDs e quantidades: o preço verdadeiro será consultado na API.
+// Recupera itens válidos, sem duplicatas e dentro dos limites; dados corrompidos resultam em carrinho vazio.
 export function lerCarrinho() {
     try {
         const itens = JSON.parse(sessionStorage.getItem('dessik_carrinho') || '[]');
@@ -23,9 +25,11 @@ export function lerCarrinho() {
     }
 }
 
+// Salva IDs e quantidades no sessionStorage para manter os itens durante a navegação.
 function salvarCarrinho(itens) {
     sessionStorage.setItem('dessik_carrinho', JSON.stringify(itens));
 }
+// Soma quantidades e verifica estoque e limites antes de persistir o carrinho.
 export function adicionarProduto(produto, quantidade) {
     const itens = lerCarrinho();
     const existente = itens.find(item => item.id_produto === produto.id_produto);
@@ -44,12 +48,14 @@ export function adicionarProduto(produto, quantidade) {
     salvarCarrinho(itens);
 }
 
+// Conecta os controles da página e inicia a consulta de preços e estoque.
 async function iniciarCarrinho() {
     await setupSession();
     const lista = document.querySelector('#cart-items');
     const finalizar = document.querySelector('#checkout');
     let enviando = false;
     let atualizando = false;
+    // Reconstrói os itens e soma subtotais em centavos; impede finalizar quando há itens inválidos.
     async function mostrarCarrinho() {
         if (atualizando || enviando) return;
         atualizando = true;
@@ -109,6 +115,7 @@ async function iniciarCarrinho() {
         lista.querySelectorAll('button, input').forEach(campo => campo.disabled = false);
         document.querySelector('#refresh-cart').disabled = false;
     }
+// Finaliza com os IDs/quantidades; o servidor confirma o total e o estoque.
     finalizar.addEventListener('click', async () => {
         if (enviando) return;
         if (!sessionStorage.getItem('dessik_token')) {
@@ -133,6 +140,7 @@ async function iniciarCarrinho() {
         } catch (erro) {
             message(erro.message + ' Se houve perda de conexão, confira Meus pedidos antes de tentar novamente.');
         } finally {
+            // Restaura os controles mesmo quando a operação falha.
             enviando = false;
             finalizar.textContent = 'Finalizar pedido';
             await mostrarCarrinho();

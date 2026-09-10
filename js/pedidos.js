@@ -1,4 +1,6 @@
+// Histórico: exige sessão e apresenta os pedidos retornados pelo servidor.
 import {
+    siteUrl,
     apiRequest,
     setupSession,
     element,
@@ -10,6 +12,7 @@ const content = document.querySelector('#orders-content');
 const list = document.querySelector('#orders-list');
 const reload = document.querySelector('#reload-orders');
 
+// Consulta pedidos autenticados e apresenta o histórico ou uma indicação de lista vazia.
 async function loadOrders() {
     reload.disabled = true;
     list.setAttribute('aria-busy', 'true');
@@ -22,7 +25,7 @@ async function loadOrders() {
         if (!orders.length) {
             const empty = element('div', undefined, 'empty');
             const link = element('a', 'Explorar produtos ↗', 'button');
-            link.href = '/loja.html';
+            link.href = siteUrl('html/loja.html');
             empty.append(element('h2', 'Seu primeiro upgrade começa aqui.'),
                 element('p', 'Você ainda não fez nenhuma compra simulada.'), link);
             list.append(empty);
@@ -43,11 +46,13 @@ async function loadOrders() {
     } catch (error) {
         message(error.message);
     } finally {
+        // Restaura os controles mesmo quando a operação falha.
         reload.disabled = false;
         list.setAttribute('aria-busy', 'false');
     }
 }
 
+// Permite consultar novamente o histórico sem recarregar a página.
 reload.addEventListener('click', loadOrders);
 if (await setupSession(true)) {
     content.hidden = false;

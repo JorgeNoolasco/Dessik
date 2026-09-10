@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+ <!-- Metadados e recursos. Caminhos relativos permitem publicar o projeto tambem em subpastas. -->
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -7,10 +8,11 @@
   <title>
    Dessik | Tecnologia para o seu dia a dia
   </title>
-  <link href="/imagens/placeholder.svg" rel="icon" type="image/svg+xml"/>
-  <link href="/css/style.css" rel="stylesheet"/>
-  <link href="/css/storefront.css?v=3" rel="stylesheet"/>
-  <script src="/js/loja.js?v=3" type="module">
+  <link href="imagens/placeholder.svg" rel="icon" type="image/svg+xml"/>
+  <link href="css/style.css" rel="stylesheet"/>
+  <link href="css/storefront.css?v=3" rel="stylesheet"/>
+  <!-- Modulo da página: importa os utilitários compartilhados. Execute usando um servidor HTTP. -->
+  <script src="js/loja.js?v=3" type="module">
   </script>
  </head>
  <body class="store-page home-page">
@@ -23,16 +25,17 @@
     Loja fictícia · Sem cobranças reais
    </span>
   </div>
+  <!-- Navegaçao compartilhada: data-guest, data-session e data-admin são atualizados conforme a sessão. -->
   <header class="navbar">
    <div class="nav-inner">
-    <a aria-label="Dessik início" class="brand" href="/index.html">
+    <a aria-label="Dessik início" class="brand" href="index.html">
      dessik
      <span>
       .
      </span>
     </a>
     <nav aria-label="Navegação principal">
-     <a aria-current="page" href="/index.html">
+     <a aria-current="page" href="index.html">
       Início
      </a>
      <a href="html/carrinho.html">
@@ -63,7 +66,9 @@
     </nav>
    </div>
   </header>
+  <!-- Conteudo principal. Os IDs identificam os elementos manipulados pelo JavaScript. -->
   <main id="main">
+   <!-- Sessão que agrupa conteúdo e controles relacionados. -->
    <section aria-labelledby="hero-title" class="hero">
     <div class="hero-copy">
      <p class="collection-label">
@@ -136,8 +141,10 @@
      EXPLORAR
     </span>
    </div>
+   <!-- área preenchida pelo JavaScript com dados ou mensagens da API. -->
    <div aria-live="polite" class="message" hidden="" id="message" role="status">
    </div>
+   <!-- Seção que agrupa conteúdo e controles relacionados. -->
    <section aria-labelledby="catalog-title" id="catalogo">
     <div class="catalog-bar">
      <div>
@@ -208,6 +215,7 @@
       Componentes
      </button>
     </div>
+    <!-- área preenchida pelo JavaScript com dados ou mensagens da API. -->
     <div aria-busy="true" class="grid" id="products">
     </div>
     <div class="pagination">
@@ -222,6 +230,7 @@
      </button>
     </div>
    </section>
+   <!-- Seção que agrupa conteúdo e controles relacionados. -->
    <section aria-label="Benefícios da loja" class="benefits">
     <article>
      <span>
@@ -258,11 +267,13 @@
     </article>
    </section>
   </main>
+  <!-- Confirmação reutilizável: o formulário method="dialog" devolve a escolha ao JavaScript. -->
   <dialog aria-labelledby="dialog-title" id="confirm-dialog">
    <h2 id="dialog-title">
    </h2>
    <p>
    </p>
+   <!-- Campos identificados por name; required e limites participam da validação nativa. -->
    <form class="actions" method="dialog">
     <button autofocus="" class="secondary" value="cancel">
      Cancelar
@@ -272,10 +283,11 @@
     </button>
    </form>
   </dialog>
+  <!-- Rodapé com atalhos para o catálogo e a conta. -->
   <footer>
    <div class="footer-main">
     <div>
-     <a class="brand" href="/index.html">
+     <a class="brand" href="index.html">
       dessik
       <span>
        .

@@ -1,9 +1,17 @@
-export const API_URL = "https://dessik-back-end.vercel.app/api"; // Mesma origem. Em hospedagens separadas, use a URL HTTPS da API.
+// Utilitários: requisições HTTP, navegação, sessão e criação segura de elementos.
+export const API_URL = "https://dessik-back-end.vercel.app/api"; // Back-end separado; esta base já inclui /api.
+// Resolve caminhos pela localização deste módulo, preservando subpastas de publicação.
+export function siteUrl(relativePath) {
+    return new URL(relativePath, new URL('../', import.meta.url)).href;
+}
+
+// Formata números como reais apenas para apresentação.
 export const money = value => Number(value).toLocaleString('pt-BR', {
     style: 'currency',
     currency: 'BRL'
 });
 
+// Envia JSON e o token quando necessário. Converte falhas de rede e respostas HTTP em erros legíveis.
 export async function apiRequest(path, {
     method = 'GET',
     body,
@@ -43,12 +51,14 @@ export async function apiRequest(path, {
     return data;
 }
 
+// Atualiza o texto e o estado visual da mensagem; sem texto, oculta a área.
 export function message(text = '', kind = 'error', target = document.querySelector('#message')) {
     target.textContent = text;
     target.className = `message ${kind}`;
     target.hidden = !text;
 }
 
+// Cria nós com textContent para que dados externos não sejam interpretados como HTML.
 export function element(tag, text, className) {
     const node = document.createElement(tag);
     if (text !== undefined) node.textContent = text; // Dados do banco nunca viram HTML executável.
@@ -56,6 +66,7 @@ export function element(tag, text, className) {
     return node;
 }
 
+// Consulta o usuário e atualiza o menu. Pode exigir login ou perfil; a API também deve validar permissões.
 export async function setupSession(required = false, admin = false) {
     if (sessionStorage.getItem('dessik_login_ok')) {
         sessionStorage.removeItem('dessik_login_ok');
@@ -63,7 +74,7 @@ export async function setupSession(required = false, admin = false) {
     }
     const token = sessionStorage.getItem('dessik_token');
     if (!token) {
-        if (required) location.replace('/login.html');
+        if (required) location.replace(siteUrl('html/login.html'));
         return null;
     }
     try {
@@ -76,20 +87,21 @@ export async function setupSession(required = false, admin = false) {
         document.querySelectorAll('[data-user]').forEach(el => el.textContent = user.nome.split(' ')[0]);
         document.querySelectorAll('[data-logout]').forEach(el => el.onclick = () => {
             sessionStorage.removeItem('dessik_token');
-            location.assign('/login.html');
+            location.assign(siteUrl('html/login.html'));
         });
         if (admin && !user.is_admin) throw new Error('Esta área está disponível apenas para administradores.');
         return user;
     } catch (error) {
         if (error.status === 401) {
             sessionStorage.removeItem('dessik_token');
-            if (required) location.replace('/login.html');
+            if (required) location.replace(siteUrl('html/login.html'));
         }
         if (required) message(error.message);
         return null;
     }
 }
 
+// Espera o fechamento do diálogo e retorna se a ação foi confirmada.
 export function confirmAction(title, description, action = 'Confirmar') {
     return new Promise(resolve => {
         const dialog = document.querySelector('#confirm-dialog');

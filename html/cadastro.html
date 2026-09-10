@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+ <!-- Metadados e recursos. Caminhos relativos permitem publicar o projeto também em subpastas. -->
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -7,10 +8,11 @@
   <title>
    Criar conta | Dessik
   </title>
-  <link href="/imagens/placeholder.svg" rel="icon" type="image/svg+xml"/>
-  <link href="/css/style.css" rel="stylesheet"/>
-  <link href="/css/storefront.css?v=3" rel="stylesheet"/>
-  <script src="/js/cadastro.js" type="module">
+  <link href="../imagens/placeholder.svg" rel="icon" type="image/svg+xml"/>
+  <link href="../css/style.css" rel="stylesheet"/>
+  <link href="../css/storefront.css?v=3" rel="stylesheet"/>
+  <!-- Módulo da página: importa os utilitários compartilhados. Execute usando um servidor HTTP. -->
+  <script src="../js/cadastro.js" type="module">
   </script>
  </head>
  <body class="account-page">
@@ -23,6 +25,7 @@
     Loja fictícia · Sem cobranças reais
    </span>
   </div>
+  <!-- Navegação compartilhada: data-guest, data-session e data-admin são atualizados conforme a sessão. -->
   <header class="navbar">
    <div class="nav-inner">
     <a aria-label="Dessik início" class="brand" href="../index.html">
@@ -35,22 +38,22 @@
      <a href="../index.html">
       Início
      </a>
-     <a href="html/carrinho.html">
+     <a href="carrinho.html">
       Carrinho
      </a>
-     <a href="html/loja.html">
+     <a href="loja.html">
       Produtos
      </a>
-     <a data-session="" hidden="" href="html/pedidos.html">
+     <a data-session="" hidden="" href="pedidos.html">
       Meus pedidos
      </a>
-     <a data-admin="" hidden="" href="html/admin.html">
+     <a data-admin="" hidden="" href="admin.html">
       Administração
      </a>
-     <a data-guest="" href="html/login.html">
+     <a data-guest="" href="login.html">
       Entrar
      </a>
-     <a class="button secondary" data-guest="" href="html/cadastro.html">
+     <a class="button secondary" data-guest="" href="cadastro.html">
       Criar conta
      </a>
      <span class="nav-session" data-session="" hidden="">
@@ -63,8 +66,10 @@
     </nav>
    </div>
   </header>
+  <!-- Conteúdo principal. Os IDs identificam os elementos manipulados pelo JavaScript. -->
   <main id="main">
    <div class="form-layout">
+    <!-- Seção que agrupa conteúdo e controles relacionados. -->
     <section class="form-intro">
      <p class="eyebrow">
       Vamos começar
@@ -77,16 +82,19 @@
      <p>
       Crie sua conta para experimentar a loja. Todas as compras são simulações, sem pagamento.
      </p>
-     <a href="html/loja.html">
+     <a href="loja.html">
       ← Conhecer os produtos
      </a>
     </section>
+    <!-- Seção que agrupa conteúdo e controles relacionados. -->
     <section class="form-panel">
      <h2>
       Crie sua conta
      </h2>
+     <!-- área preenchida pelo JavaScript com dados ou mensagens da API. -->
      <div aria-live="polite" class="message" hidden="" id="message" role="status">
      </div>
+     <!-- Campos identificados por name; required e limites participam da validação nativa. -->
      <form id="register-form">
       <div class="fields">
        <label>
@@ -157,18 +165,20 @@
      </form>
      <p class="form-foot">
       Já tem uma conta?
-      <a href="html/login.html">
+      <a href="login.html">
        Entrar
       </a>
      </p>
     </section>
    </div>
   </main>
+  <!-- Confirmação reutilizável: o formulário method="dialog" devolve a escolha ao JavaScript. -->
   <dialog aria-labelledby="dialog-title" id="confirm-dialog">
    <h2 id="dialog-title">
    </h2>
    <p>
    </p>
+   <!-- Campos identificados por name; required e limites participam da validação nativa. -->
    <form class="actions" method="dialog">
     <button autofocus="" class="secondary" value="cancel">
      Cancelar
@@ -178,6 +188,7 @@
     </button>
    </form>
   </dialog>
+  <!-- Rodapé com atalhos para o catálogo e a conta. -->
   <footer>
    <div class="footer-main">
     <div>
@@ -194,13 +205,13 @@
      </p>
     </div>
     <div class="footer-links">
-     <a href="html/loja.html">
+     <a href="loja.html">
       Explorar produtos
      </a>
-     <a href="html/login.html">
+     <a href="login.html">
       Minha conta
      </a>
-     <a href="html/cadastro.html">
+     <a href="cadastro.html">
       Criar conta
      </a>
     </div>

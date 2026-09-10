@@ -1,4 +1,6 @@
+/* Tema Dessik: complementa style.css e deve ser carregado depois dele. */
 /* Identidade Dessik. style.css contém os componentes básicos. */
+/* Paleta e tipografia globais; var() reutiliza essas configurações. */
 :root {
     --ink: #252932;
     --muted: #59616e;
@@ -46,6 +48,7 @@ textarea:focus-visible {
     outline-color: #984120;
 }
 
+/* Texto acessível para leitores de tela, oculto apenas visualmente. */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -103,6 +106,7 @@ nav a.button {
     color: white;
 }
 
+/* Largura e espaçamento do conteúdo principal. */
 main {
     max-width: 1344px;
     padding: 22px 36px 72px;
@@ -341,6 +345,7 @@ main {
     border-color: #252932;
 }
 
+/* Apresentação dos cartões de produtos. */
 .card {
     box-shadow: 0 4px 16px #27314208;
 }
@@ -417,7 +422,7 @@ main {
 
 /* A imagem reúne 4 colunas e 2 linhas. Cada posição mostra um produto. */
 .product-art {
-    background-image: url('/imagens/catalogo-dessik.png');
+    background-image: url('../imagens/catalogo-dessik.png');
     background-size: 400% 200%;
     background-repeat: no-repeat;
 }
@@ -459,6 +464,7 @@ main {
     padding-top: 52px;
 }
 
+/* Painel que agrupa os campos e ações. */
 .form-panel {
     box-shadow: 0 4px 16px #27314208;
 }
@@ -467,6 +473,7 @@ main {
     font-size: clamp(2.5rem, 4vw, 3.6rem);
 }
 
+/* Distribui a introdução e o formulário. */
 .form-layout {
     max-width: 1100px;
 }
@@ -555,6 +562,7 @@ main {
     color: #246743;
 }
 
+/* Rodapé e atalhos complementares. */
 footer {
     display: block;
     max-width: 1272px;
@@ -595,6 +603,7 @@ footer {
 }
 
 /* Três pontos de ajuste; a estrutura básica usa grid e flex. */
+/* Até 1100px: adapta colunas, tamanhos e espaçamentos à tela. */
 @media(max-width:1100px) {
     .hero h1 {
         font-size: 3.3rem;
@@ -614,6 +623,7 @@ footer {
     }
 }
 
+/* Até 850px: adapta colunas, tamanhos e espaçamentos à tela. */
 @media(max-width:850px) {
     .hero {
         grid-template-columns: 1fr 1fr;
@@ -653,6 +663,7 @@ footer {
     }
 }
 
+/* Até 520px: adapta colunas, tamanhos e espaçamentos à tela. */
 @media(max-width:520px) {
     main {
         padding: 20px 22px 45px;

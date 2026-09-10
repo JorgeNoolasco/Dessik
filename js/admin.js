@@ -1,3 +1,4 @@
+// Administração: cadastro, edição, exclusão confirmada e paginação de produtos.
 import {
     apiRequest,
     message,
@@ -12,12 +13,14 @@ let editing = null;
 let offset = 0;
 const limit = 20;
 
+// Limpa os campos e encerra o modo de edição.
 function resetForm() {
     form.reset();
     editing = null;
     document.querySelector('#form-title').textContent = 'Novo produto';
     document.querySelector('#save-product').textContent = 'Cadastrar produto';
 }
+// Busca a página de produtos e atualiza a listagem e os botões de paginação.
 async function loadProducts() {
     const products = await apiRequest(`/produtos?limite=${limit}&offset=${offset}`);
     table.replaceChildren();
@@ -51,6 +54,7 @@ async function loadProducts() {
             } catch (error) {
                 message(error.message);
             } finally {
+                // Restaura os controles mesmo quando a operação falha.
                 remove.disabled = false;
             }
         };
@@ -69,6 +73,7 @@ async function loadProducts() {
     document.querySelector('#next').disabled = products.length < limit;
     document.querySelector('#page-number').textContent = `Página ${offset / limit + 1}`;
 }
+// Atualiza a tabela e apresenta eventuais falhas na área de mensagens.
 async function refresh() {
     try {
         await loadProducts();
@@ -76,6 +81,7 @@ async function refresh() {
         message(error.message);
     }
 }
+// Envia pela API sem recarregar a página; o botão é bloqueado durante o envio.
 form.addEventListener('submit', async event => {
     event.preventDefault();
     const button = document.querySelector('#save-product');
@@ -94,14 +100,17 @@ form.addEventListener('submit', async event => {
     } catch (error) {
         message(error.message);
     } finally {
+        // Restaura os controles mesmo quando a operação falha.
         button.disabled = false;
     }
 });
 document.querySelector('#cancel-edit').onclick = resetForm;
+// Volta uma página sem permitir deslocamento negativo.
 document.querySelector('#previous').onclick = () => {
     offset = Math.max(0, offset - limit);
     refresh();
 };
+// Avança a listagem pelo limite de produtos por página.
 document.querySelector('#next').onclick = () => {
     offset += limit;
     refresh();
