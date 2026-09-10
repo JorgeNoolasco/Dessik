@@ -36,6 +36,8 @@ export async function apiRequest(path, {
         throw new Error('Sem conexão com a loja. Verifique sua internet e tente novamente.');
     }
     let data;
+    // DELETE retorna 204 sem JSON; a exclusão já foi confirmada pelo servidor.
+    if (response.status === 204) return null;
     try {
         data = await response.json();
     } catch {

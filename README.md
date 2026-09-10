@@ -4,7 +4,7 @@ HTML organiza as páginas, CSS define a aparência e JavaScript busca dados e re
 
 ## Como abrir
 
-Primeiro execute o back-end conforme [privada/README.md](../privada/README.md). Abra **http://127.0.0.1:8000**. FastAPI serve esta pasta e a API no mesmo endereço. Não abra por duplo clique (`file://`): módulos JavaScript e requisições precisam de um servidor HTTP.
+O back-end está em [Dessik-BackEnd](../Dessik-BackEnd/README.md) e usa PostgreSQL no Supabase. O site chama a API HTTPS definida em `js/api.js`. Não abra por duplo clique (`file://`): módulos JavaScript e requisições precisam de um servidor HTTP.
 
 Opcionalmente, para hospedar o front-end separado, execute nesta pasta:
 
@@ -18,7 +18,7 @@ Nesse caso, mude somente a constante em `js/api.js`:
 export const API_URL = "http://127.0.0.1:8000/api";
 ```
 
-Abra http://127.0.0.1:5500. A API deve permitir essa origem em `CORS_ORIGINS`. O padrão da entrega é `API_URL = "/api"`, pois tudo roda na mesma origem. Na publicação separada, coloque a URL **HTTPS** do seu back-end nessa constante.
+Abra http://127.0.0.1:5500. A API deve permitir essa origem em `FRONTEND_URL`. A entrega usa a API separada em `https://dessik-back-end.vercel.app/api`. Na publicação separada, coloque a URL **HTTPS** do seu back-end nessa constante.
 
 ## O que cada arquivo faz
 
@@ -50,7 +50,7 @@ Os oito primeiros produtos usam uma imagem com oito ilustrações. O CSS selecio
 
 ## Segurança no navegador
 
-Tudo enviado ao navegador deve ser considerado público. Não coloque `.env`, senha do MySQL, `JWT_SECRET` ou chave secreta nesta pasta. A URL da API pode ser pública; suas credenciais não.
+Tudo enviado ao navegador deve ser considerado público. Não coloque `.env`, senha do PostgreSQL, `SECRET_KEY` ou chave secreta nesta pasta. A URL da API pode ser pública; suas credenciais não.
 
 O token retornado após login é uma credencial temporária do usuário e não faz parte dos arquivos do repositório. Ele fica em `sessionStorage`. Sair remove o token. O carrinho usa o mesmo armazenamento, mas contém somente IDs e quantidades, sem dados de pagamento.
 
