@@ -7,6 +7,7 @@ import {
 import {
     siteUrl,
     apiRequest,
+    productPage,
     message,
     money,
     element,
@@ -46,7 +47,7 @@ function card(product) {
     // Imagens locais pertencem ao projeto; URLs externas são mantidas.
     image.src = /^\/?imagens\//.test(product.imagem_url)
         ? siteUrl(product.imagem_url.replace(/^\//, ''))
-        : product.imagem_url;
+        : product.imagem_url || siteUrl('imagens/placeholder.svg');
     image.alt = product.nome;
     image.loading = 'lazy';
     image.addEventListener('error', () => image.src = siteUrl('imagens/placeholder.svg'), {
@@ -125,25 +126,30 @@ async function loadProducts(clear = true) {
     const version = ++requestVersion;
     if (clear) message();
     grid.setAttribute('aria-busy', 'true');
+    document.querySelector('#previous').disabled = true;
+    document.querySelector('#next').disabled = true;
     try {
-        let products;
-        const filters = new URLSearchParams({
+        const { products, hasNext } = await productPage({
+            limite: limit,
+            offset,
             busca: search.value.trim(),
             categoria: category,
             ordem: sort.value
         });
-        products = await apiRequest(`/produtos?limite=${limit}&offset=${offset}&${filters}`);
         if (version !== requestVersion) return;
         atualizarEstoques = [];
         grid.replaceChildren(...products.map(card));
         if (!products.length) grid.append(element('p', 'Nenhum produto encontrado. Experimente outra busca ou categoria.', 'empty'));
         document.querySelector('#product-count').textContent = `${products.length} produtos nesta seleção`;
         document.querySelector('#previous').disabled = offset === 0;
-        document.querySelector('#next').disabled = products.length < limit;
+        document.querySelector('#next').disabled = !hasNext;
         document.querySelector('#page-number').textContent = `Página ${offset / limit + 1}`;
     } catch (error) {
         if (version !== requestVersion) return;
+        atualizarEstoques = [];
         grid.replaceChildren(element('p', 'Não foi possível carregar o catálogo.', 'empty'));
+        document.querySelector('#product-count').textContent = 'Catálogo indisponível';
+        document.querySelector('#previous').disabled = offset === 0;
         message(error.message);
     } finally {
         // Restaura os controles mesmo quando a operação falha.
@@ -156,6 +162,8 @@ search.addEventListener('input', () => {
     clearTimeout(searchTimer);
     // Invalida resultados anteriores ainda em trânsito antes da próxima busca.
     requestVersion++;
+    document.querySelector('#previous').disabled = true;
+    document.querySelector('#next').disabled = true;
     searchTimer = setTimeout(() => {
         offset = 0;
         loadProducts();

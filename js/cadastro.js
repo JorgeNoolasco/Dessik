@@ -61,12 +61,15 @@ form.addEventListener('submit', async event => {
     validatePasswords();
     if (!form.reportValidity()) return;
     const button = form.querySelector('[type="submit"]');
+    if (button.disabled) return;
     button.disabled = true;
     message();
     try {
         const body = Object.fromEntries(new FormData(form));
         body.cep = body.cep.replace(/\D/g, '');
-        await apiRequest('/cadastro', {
+        body.email = body.email.trim().toLowerCase();
+        body.estado = body.estado.trim().toUpperCase();
+        await apiRequest('/usuarios', {
             method: 'POST',
             body
         });

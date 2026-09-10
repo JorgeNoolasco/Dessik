@@ -1,0 +1,13 @@
+{
+  "name": "dessik-frontend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/api.test.mjs",
+    "test:browser": "node tests/browser.cjs",
+    "test:live": "node tests/live.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.0"
+  }
+}

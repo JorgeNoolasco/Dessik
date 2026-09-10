@@ -135,6 +135,25 @@
        </button>
       </div>
      </form>
+     <form id="stock-form" hidden="">
+      <h2 id="stock-product">Movimentar estoque</h2>
+      <div class="fields">
+       <label>Operação
+        <select name="operacao">
+         <option value="entrada">Entrada</option>
+         <option value="saida">Saída</option>
+         <option value="ajuste">Ajuste do saldo total</option>
+        </select>
+       </label>
+       <label>Quantidade
+        <input name="quantidade" type="number" min="0" max="2147483647" step="1" required=""/>
+       </label>
+      </div>
+      <div class="actions">
+       <button type="submit">Confirmar estoque</button>
+       <button id="cancel-stock" type="button" class="secondary">Cancelar</button>
+      </div>
+     </form>
     </section>
     <!-- Seção que agrupa conteúdo e controles relacionados. -->
     <section aria-label="Produtos cadastrados">

@@ -1,6 +1,7 @@
 // Administração: cadastro, edição, exclusão confirmada e paginação de produtos.
 import {
     apiRequest,
+    productPage,
     message,
     money,
     element,
@@ -12,6 +13,9 @@ const table = document.querySelector('#product-rows');
 let editing = null;
 let offset = 0;
 const limit = 20;
+let loading = false;
+const stockForm = document.querySelector('#stock-form');
+let stockProduct = null;
 
 // Limpa os campos e encerra o modo de edição.
 function resetForm() {
@@ -22,7 +26,17 @@ function resetForm() {
 }
 // Busca a página de produtos e atualiza a listagem e os botões de paginação.
 async function loadProducts() {
-    const products = await apiRequest(`/produtos?limite=${limit}&offset=${offset}`);
+    if (loading) return;
+    loading = true;
+    document.querySelector('#previous').disabled = true;
+    document.querySelector('#next').disabled = true;
+    try {
+    let page = await productPage({ limite: limit, offset });
+    if (!page.products.length && offset > 0) {
+        offset = Math.max(0, offset - limit);
+        page = await productPage({ limite: limit, offset });
+    }
+    const { products, hasNext } = page;
     table.replaceChildren();
     for (const product of products) {
         const row = element('tr');
@@ -58,7 +72,15 @@ async function loadProducts() {
                 remove.disabled = false;
             }
         };
-        actions.append(edit, remove);
+        const stock = element('button', 'Estoque', 'secondary');
+        stock.onclick = () => {
+            stockProduct = product.id_produto;
+            stockForm.reset();
+            stockForm.hidden = false;
+            document.querySelector('#stock-product').textContent = `Estoque: ${product.nome} · Saldo consultado: ${product.quantidade_estoque}`;
+            stockForm.elements.quantidade.focus();
+        };
+        actions.append(edit, stock, remove);
         row.append(actions);
         table.append(row);
     }
@@ -70,8 +92,12 @@ async function loadProducts() {
         table.append(row);
     }
     document.querySelector('#previous').disabled = offset === 0;
-    document.querySelector('#next').disabled = products.length < limit;
+    document.querySelector('#next').disabled = !hasNext;
     document.querySelector('#page-number').textContent = `Página ${offset / limit + 1}`;
+    } finally {
+        loading = false;
+        document.querySelector('#previous').disabled = offset === 0;
+    }
 }
 // Atualiza a tabela e apresenta eventuais falhas na área de mensagens.
 async function refresh() {
@@ -85,10 +111,12 @@ async function refresh() {
 form.addEventListener('submit', async event => {
     event.preventDefault();
     const button = document.querySelector('#save-product');
+    if (button.disabled || !form.reportValidity()) return;
     button.disabled = true;
     try {
         const body = Object.fromEntries(new FormData(form));
-        body.quantidade_estoque = Number(body.quantidade_estoque);
+        body.quantidade = Number(body.quantidade_estoque);
+        delete body.quantidade_estoque;
         const data = await apiRequest(editing ? `/produtos/${editing}` : '/produtos', {
             method: editing ? 'PUT' : 'POST',
             auth: true,
@@ -104,6 +132,37 @@ form.addEventListener('submit', async event => {
         button.disabled = false;
     }
 });
+// Movimentações relativas são calculadas e registradas pelo backend, com JWT.
+stockForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    const button = stockForm.querySelector('[type="submit"]');
+    if (button.disabled || !stockProduct || !stockForm.reportValidity()) return;
+    const productId = stockProduct;
+    const operation = stockForm.elements.operacao.value;
+    const quantidade = Number(stockForm.elements.quantidade.value);
+    if (!['entrada', 'saida', 'ajuste'].includes(operation)) return;
+    if (!Number.isInteger(quantidade) || quantidade < (operation === 'ajuste' ? 0 : 1)) {
+        return message('Informe uma quantidade inteira válida. Entrada e saída devem ser maiores que zero.');
+    }
+    button.disabled = true;
+    try {
+        const data = await apiRequest(`/produtos/${productId}${operation === 'ajuste' ? '' : `/${operation}`}`, {
+            method: operation === 'ajuste' ? 'PUT' : 'POST',
+            auth: true,
+            body: { quantidade }
+        });
+        stockForm.hidden = true;
+        stockProduct = null;
+        if (editing === productId) form.elements.quantidade_estoque.value = data.quantidade_estoque;
+        message(`Estoque atualizado. Saldo confirmado: ${data.quantidade_estoque}.`, 'success');
+        await refresh();
+    } catch (error) {
+        message(error.message);
+    } finally {
+        button.disabled = false;
+    }
+});
+document.querySelector('#cancel-stock').onclick = () => { stockForm.hidden = true; stockProduct = null; };
 document.querySelector('#cancel-edit').onclick = resetForm;
 // Volta uma página sem permitir deslocamento negativo.
 document.querySelector('#previous').onclick = () => {
