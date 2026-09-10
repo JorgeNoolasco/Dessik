@@ -6,13 +6,13 @@
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <meta content="Dessik: loja fictícia de tecnologia para um projeto acadêmico." name="description"/>
   <title>
-   Meus pedidos | Dessik
+   Meu perfil | Dessik
   </title>
   <link href="../imagens/placeholder.svg" rel="icon" type="image/svg+xml"/>
   <link href="../css/style.css" rel="stylesheet"/>
   <link href="../css/storefront.css?v=3" rel="stylesheet"/>
   <!-- Módulo da página: importa os utilitários compartilhados. Execute usando um servidor HTTP. -->
-  <script src="../js/pedidos.js" type="module">
+  <script src="../js/perfil.js" type="module">
   </script>
  </head>
  <body class="account-page">
@@ -44,11 +44,11 @@
      <a href="loja.html">
       Explorar produtos
      </a>
-     <a data-session="" hidden="" aria-current="page" href="pedidos.html">
+     <a data-session="" hidden="" href="pedidos.html">
       Meus pedidos
      </a>
      <!-- O perfil só aparece após a validação da sessão pela API. -->
-     <a data-session="" hidden="" href="perfil.html">Meu perfil</a>
+     <a data-session="" hidden="" aria-current="page" href="perfil.html">Meu perfil</a>
      <a data-admin="" hidden="" href="admin.html">
       Administração
      </a>
@@ -70,40 +70,22 @@
   </header>
   <!-- Conteúdo principal. Os IDs identificam os elementos manipulados pelo JavaScript. -->
   <main id="main">
-   <!-- Seção que agrupa conteúdo e controles relacionados. -->
+   <!-- O perfil permanece oculto até /me confirmar a identidade da conta. -->
    <section class="intro">
-    <div>
-     <p class="eyebrow">
-      SUA CONTA / HISTÓRICO
-     </p>
-     <h1>
-      Meus pedidos
-      <span>
-       .
-      </span>
-     </h1>
-     <p>
-      Suas escolhas, todas em um só lugar.
-     </p>
-    </div>
-    <a class="button secondary" href="../index.html">
-     Voltar à loja ↗
-    </a>
+    <div><p class="eyebrow">SUA CONTA</p><h1>Meu perfil<span>.</span></h1><p>Seus dados e pedidos em um só lugar.</p></div>
    </section>
-   <!-- área preenchida pelo JavaScript com dados ou mensagens da API. -->
-   <div class="message" hidden="" id="message" role="status">
-   </div>
-   <!-- Seção que agrupa conteúdo e controles relacionados. -->
-   <section hidden="" id="orders-content">
-    <div class="catalog-bar">
-     <span class="muted" id="order-count">
-     </span>
-     <button class="secondary" id="reload-orders">
-      Atualizar ↻
-     </button>
-    </div>
-    <!-- área preenchida pelo JavaScript com dados ou mensagens da API. -->
-    <div aria-busy="false" id="orders-list">
+   <div class="message" hidden id="message" role="status"></div>
+   <section class="form-panel profile-panel" hidden data-private id="profile-content" aria-labelledby="profile-title">
+    <h2 id="profile-title">Dados da conta</h2>
+    <!-- Apenas campos públicos retornados pela API; senhas e tokens nunca são exibidos. -->
+    <dl class="profile-details">
+     <div><dt>Nome completo</dt><dd data-profile-field id="profile-name"></dd></div>
+     <div><dt>E-mail</dt><dd data-profile-field id="profile-email"></dd></div>
+    </dl>
+    <div class="actions">
+     <a class="button" href="pedidos.html">Meus pedidos</a>
+     <a class="button secondary" href="loja.html">Continuar comprando</a>
+     <button class="secondary" data-logout type="button">Sair da conta</button>
     </div>
    </section>
   </main>

@@ -757,3 +757,20 @@ footer {
         flex-direction: column;
     }
 }
+/* Perfil: painel compacto e campos que acomodam nomes e e-mails longos no celular. */
+.profile-panel {
+    max-width: 760px;
+}
+.profile-details {
+    display: grid;
+    gap: 24px;
+    margin: 0;
+}
+.profile-details dt {
+    font-weight: 600;
+    color: var(--muted);
+}
+.profile-details dd {
+    margin: 6px 0 0;
+    overflow-wrap: anywhere;
+}

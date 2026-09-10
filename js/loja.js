@@ -1,6 +1,8 @@
 // Vitrine: cartões, busca, categorias, ordenação e paginação de produtos.
 import {
-    adicionarProduto
+    adicionarProduto,
+    estoqueDisponivel,
+    lerCarrinho
 } from './carrinho.js';
 import {
     siteUrl,
@@ -16,6 +18,13 @@ let offset = 0;
 const limit = document.body.classList.contains('home-page') ? 4 : 12;
 let category = '';
 let requestVersion = 0;
+// Guarda somente os cartões visíveis, evitando acumular ouvintes ao paginar.
+let atualizarEstoques = [];
+window.addEventListener('dessik:carrinho-atualizado', () => atualizarEstoques.forEach(atualizar => atualizar()));
+// Reconsulta o servidor ao voltar pelo histórico, inclusive após remover itens ou comprar.
+window.addEventListener('pageshow', event => {
+    if (event.persisted) loadProducts(false);
+});
 const search = document.querySelector('#search');
 const sort = document.querySelector('#sort');
 const productArt = new Map([
@@ -67,16 +76,42 @@ function card(product) {
     quantity.disabled = product.quantidade_estoque === 0;
     const button = element('button', product.quantidade_estoque ? 'Comprar ↗' : 'Indisponível');
     button.disabled = product.quantidade_estoque === 0;
+    let adicionando = false;
+    // Atualiza texto, limites e controles usando o estoque menos a quantidade no carrinho.
+    function atualizarEstoque() {
+        const disponivel = estoqueDisponivel(product);
+        const noCarrinho = lerCarrinho().find(item => item.id_produto === product.id_produto)?.quantidade || 0;
+        const stock = body.querySelector('.stock');
+        stock.textContent = `Disponível para adicionar: ${disponivel} unidades` + (noCarrinho ? ` · No carrinho: ${noCarrinho}` : '');
+        stock.className = disponivel ? 'stock' : 'stock out';
+        quantity.max = String(Math.max(0, Math.min(disponivel, 1000 - noCarrinho)));
+        quantity.disabled = adicionando || Number(quantity.max) === 0;
+        if (Number(quantity.value) > Number(quantity.max) || Number(quantity.value) < 1) quantity.value = Number(quantity.max) ? '1' : '0';
+        button.disabled = quantity.disabled;
+        button.textContent = adicionando ? 'Adicionando...' : Number(quantity.max) ? 'Comprar ↗' : noCarrinho ? 'Limite no carrinho' : 'Indisponível';
+        visual.querySelector('.product-tag').textContent = disponivel ? 'DESSIK / ESSENTIALS' : noCarrinho ? 'NO CARRINHO' : 'ESGOTADO';
+    }
+    atualizarEstoques.push(atualizarEstoque);
+    atualizarEstoque();
     button.addEventListener('click', async () => {
+        if (adicionando || !quantity.reportValidity()) return;
+        const desejada = Number(quantity.value);
+        adicionando = true;
+        atualizarEstoque();
         try {
-            if (!quantity.reportValidity()) return;
-            adicionarProduto(product, Number(quantity.value));
+            // Consulta o saldo atual antes de adicionar; cliques repetidos ficam bloqueados.
+            const atualizado = await apiRequest(`/produtos/${product.id_produto}`);
+            product.quantidade_estoque = atualizado.quantidade_estoque;
+            adicionarProduto(product, desejada);
             message('Produto adicionado ao carrinho.', 'success');
             document.querySelector('#message').scrollIntoView({
                 block: 'nearest'
             });
         } catch (error) {
             message(error.message);
+        } finally {
+            adicionando = false;
+            atualizarEstoque();
         }
     });
     row.append(quantity, button);
@@ -99,6 +134,7 @@ async function loadProducts(clear = true) {
         });
         products = await apiRequest(`/produtos?limite=${limit}&offset=${offset}&${filters}`);
         if (version !== requestVersion) return;
+        atualizarEstoques = [];
         grid.replaceChildren(...products.map(card));
         if (!products.length) grid.append(element('p', 'Nenhum produto encontrado. Experimente outra busca ou categoria.', 'empty'));
         document.querySelector('#product-count').textContent = `${products.length} produtos nesta seleção`;

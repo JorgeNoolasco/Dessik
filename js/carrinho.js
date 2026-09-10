@@ -28,6 +28,13 @@ export function lerCarrinho() {
 // Salva IDs e quantidades no sessionStorage para manter os itens durante a navegação.
 function salvarCarrinho(itens) {
     sessionStorage.setItem('dessik_carrinho', JSON.stringify(itens));
+    // A vitrine recalcula o saldo assim que itens entram ou saem do carrinho.
+    window.dispatchEvent(new Event('dessik:carrinho-atualizado'));
+}
+// Desconta apenas o carrinho desta aba; a baixa definitiva pertence ao servidor no pedido.
+export function estoqueDisponivel(produto) {
+    const quantidade = lerCarrinho().find(item => item.id_produto === produto.id_produto)?.quantidade || 0;
+    return Math.max(0, produto.quantidade_estoque - quantidade);
 }
 // Soma quantidades e verifica estoque e limites antes de persistir o carrinho.
 export function adicionarProduto(produto, quantidade) {
@@ -73,6 +80,8 @@ async function iniciarCarrinho() {
                 const subtotal = Math.round(Number(produto.preco) * 100) * item.quantidade;
                 totalCentavos += subtotal;
                 detalhes.append(element('h2', produto.nome), element('p', `${money(produto.preco)} por unidade`));
+                // Mostra quanto ainda pode ser adicionado sem contar novamente estes itens.
+                detalhes.append(element('p', `Disponível para adicionar: ${estoqueDisponivel(produto)} unidades`, 'stock'));
                 const label = element('label', 'Quantidade');
                 const quantidade = element('input');
                 quantidade.type = 'number';
