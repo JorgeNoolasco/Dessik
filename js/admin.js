@@ -179,3 +179,100 @@ if (user) {
     document.querySelector('#admin-content').hidden = false;
     await refresh();
 }
+async function carregarLogsSeguranca() {
+    const container =
+        document.querySelector(
+            "#logsSeguranca"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML =
+        "<p>Carregando logs...</p>";
+
+    try {
+        const logs = await apiRequest(
+            "/seguranca/logs"
+        );
+
+        if (
+            !Array.isArray(logs)
+            || logs.length === 0
+        ) {
+            container.innerHTML =
+                "<p>Nenhum evento registrado.</p>";
+
+            return;
+        }
+
+        container.innerHTML = logs
+            .map((log) => {
+                const data = log.data_evento
+                    ? new Date(
+                        log.data_evento
+                    ).toLocaleString(
+                        "pt-BR"
+                    )
+                    : "-";
+
+                return `
+                    <article class="security-log">
+                        <div class="security-log-top">
+                            <strong>
+                                ${escaparHtml(
+                                    log.evento
+                                )}
+                            </strong>
+
+                            <span>
+                                ${escaparHtml(
+                                    data
+                                )}
+                            </span>
+                        </div>
+
+                        <p>
+                            ${escaparHtml(
+                                log.descricao
+                                || "Sem descrição."
+                            )}
+                        </p>
+
+                        <div class="security-log-meta">
+                            <span>
+                                Usuário:
+                                ${
+                                    log.usuario_id
+                                    ?? "Não identificado"
+                                }
+                            </span>
+
+                            <span>
+                                IP:
+                                ${escaparHtml(
+                                    log.ip
+                                    || "Não informado"
+                                )}
+                            </span>
+                        </div>
+                    </article>
+                `;
+            })
+            .join("");
+
+    } catch (erro) {
+        console.error(
+            "Erro ao carregar logs:",
+            erro
+        );
+
+        container.innerHTML = `
+            <p>
+                Não foi possível carregar
+                os logs de segurança.
+            </p>
+        `;
+    }
+}
