@@ -195,3 +195,286 @@ document.querySelector('#reload').onclick = () => {
     loadProducts();
 };
 loadProducts();
+// ============================================================
+// MONTADOR DE SETUP
+// ============================================================
+
+const btnMontarSetup =
+    document.getElementById("btnMontarSetup");
+
+const montadorSetup =
+    document.getElementById("montadorSetup");
+
+const btnGerarSetup =
+    document.getElementById("btnGerarSetup");
+
+const resultadoSetup =
+    document.getElementById("resultadoSetup");
+
+
+if (btnMontarSetup && montadorSetup) {
+    btnMontarSetup.addEventListener(
+        "click",
+        () => {
+            montadorSetup.hidden = false;
+
+            montadorSetup.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+    );
+}
+
+
+if (btnGerarSetup && resultadoSetup) {
+
+    btnGerarSetup.addEventListener(
+        "click",
+        async () => {
+
+            const uso =
+                document.getElementById(
+                    "setupUso"
+                ).value;
+
+            const orcamento =
+                Number(
+                    document.getElementById(
+                        "setupOrcamento"
+                    ).value
+                );
+
+            const prioridade =
+                document.getElementById(
+                    "setupPrioridade"
+                ).value;
+
+
+            if (!orcamento || orcamento <= 0) {
+                resultadoSetup.innerHTML = `
+                    <p class="message error">
+                        Informe um orçamento válido.
+                    </p>
+                `;
+
+                return;
+            }
+
+
+            resultadoSetup.innerHTML = `
+                <p class="muted">
+                    Procurando produtos para seu setup...
+                </p>
+            `;
+
+
+            try {
+
+                const response = await fetch(
+                    "https://dessik-back-end.vercel.app/api/setup/recomendar",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            uso,
+                            orcamento,
+                            prioridade
+                        })
+                    }
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.detail
+                        || data.mensagem
+                        || "Não foi possível montar o setup."
+                    );
+                }
+
+
+                renderizarSetup(data);
+
+            } catch (erro) {
+
+                resultadoSetup.innerHTML = `
+                    <p class="message error">
+                        ${erro.message}
+                    </p>
+                `;
+            }
+        }
+    );
+}
+
+
+function renderizarSetup(setup) {
+
+    if (
+        !setup.produtos
+        || setup.produtos.length === 0
+    ) {
+        resultadoSetup.innerHTML = `
+            <p>
+                Nenhum setup encontrado
+                dentro desse orçamento.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    const produtosHTML =
+        setup.produtos
+            .map(
+                (produto) => `
+                    <article class="setup-product">
+
+                        ${
+                            produto.imagem_url
+                                ? `
+                                    <img
+                                        src="${produto.imagem_url}"
+                                        alt="${produto.nome}"
+                                    >
+                                `
+                                : ""
+                        }
+
+                        <div>
+                            <span class="muted">
+                                ${produto.categoria}
+                            </span>
+
+                            <h3>
+                                ${produto.nome}
+                            </h3>
+
+                            <strong>
+                                ${formatarPreco(
+                                    produto.preco
+                                )}
+                            </strong>
+                        </div>
+
+                    </article>
+                `
+            )
+            .join("");
+
+
+    resultadoSetup.innerHTML = `
+
+        <div class="setup-result">
+
+            <h3>
+                Seu setup recomendado
+            </h3>
+
+            <div class="setup-products">
+                ${produtosHTML}
+            </div>
+
+            <div class="setup-summary">
+
+                <p>
+                    Orçamento:
+                    <strong>
+                        ${formatarPreco(
+                            setup.orcamento
+                        )}
+                    </strong>
+                </p>
+
+                <p>
+                    Total:
+                    <strong>
+                        ${formatarPreco(
+                            setup.total
+                        )}
+                    </strong>
+                </p>
+
+                <p>
+                    Restante:
+                    <strong>
+                        ${formatarPreco(
+                            setup.restante
+                        )}
+                    </strong>
+                </p>
+
+            </div>
+
+            <button
+                class="button"
+                id="btnAdicionarSetup"
+            >
+                Adicionar setup ao carrinho
+            </button>
+
+        </div>
+    `;
+
+
+    const btnAdicionar =
+        document.getElementById(
+            "btnAdicionarSetup"
+        );
+
+
+    if (btnAdicionar) {
+
+        btnAdicionar.addEventListener(
+            "click",
+            () => {
+
+                adicionarSetupAoCarrinho(
+                    setup.produtos
+                );
+            }
+        );
+    }
+}
+
+
+function formatarPreco(valor) {
+
+    return Number(valor).toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+}
+
+
+function adicionarSetupAoCarrinho(produtos) {
+
+    /*
+     * Aqui precisamos usar a função que
+     * seu loja.js já utiliza atualmente
+     * para adicionar produtos ao carrinho.
+     */
+
+    console.log(
+        "Produtos escolhidos:",
+        produtos
+    );
+
+    alert(
+        "Setup montado! Agora falta ligar esta função ao carrinho atual."
+    );
+}

@@ -115,6 +115,79 @@
        </strong>
       </div>
       <a aria-label="Explorar produtos" href="#catalogo">
+        <button id="btnMontarSetup">
+    Montar meu Setup
+</button>
+
+<div id="montadorSetup" hidden>
+
+    <h2>Monte seu Setup</h2>
+
+    <label>
+        Qual será o uso principal?
+    </label>
+
+    <select id="setupUso">
+        <option value="jogos">
+            Jogos
+        </option>
+
+        <option value="estudo">
+            Estudo
+        </option>
+
+        <option value="trabalho">
+            Trabalho
+        </option>
+
+        <option value="edicao">
+            Edição
+        </option>
+    </select>
+
+
+    <label>
+        Qual seu orçamento?
+    </label>
+
+    <input
+        id="setupOrcamento"
+        type="number"
+        min="500"
+        step="100"
+        placeholder="Ex: 5000"
+    >
+
+
+    <label>
+        O que você prioriza?
+    </label>
+
+    <select id="setupPrioridade">
+
+        <option value="economia">
+            Economia
+        </option>
+
+        <option value="equilibrio" selected>
+            Equilíbrio
+        </option>
+
+        <option value="desempenho">
+            Desempenho
+        </option>
+
+    </select>
+
+
+    <button id="btnGerarSetup">
+        Encontrar Setup
+    </button>
+
+
+    <div id="resultadoSetup"></div>
+
+</div>
        ↗
       </a>
      </div>
